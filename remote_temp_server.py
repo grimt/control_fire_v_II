@@ -24,13 +24,19 @@ while 1:
     conn, addr = s.accept()
     print 'Connected with ' + addr[0] + ':' + str(addr[1])
                                            
-    data = conn.recv(1024)
-    print 'Remote temperature: ' + data
+    temp_str = conn.recv(1024)
+    data = temp_str.split(':')
+    if data[0] = 'R':
+        print 'Remote Reaquired temperature: ' + data[1]
+    else if data[0]= 'M':
+
+        print 'Remote Measured temperature: ' + data[1]
+
     # Next write temperature to a file.
     if not data: 
         print 'no data' 
                                          
-    conn.sendall(reply)
+#    conn.sendall(reply)
                                                        
 conn.close()
 s.close()
