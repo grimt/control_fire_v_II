@@ -32,27 +32,15 @@ while True:
     except socket.error:
         print 'connection refused'
 
-    #humidity, temperature = Adafruit_DHT.read_retry(22, 4)
-    humidity, temperature = Adafruit_DHT.read(22, 4)
-   
-   
-    # Note that sometimes you won't get a reading and
-    # the results will be null (because Linux can't
-    # guarantee the timing of calls to read the sensor).  
-    # If this happens try again!
-  
-    if humidity is not None and temperature is not None:
-        temp = "M:" + "%.3f" % temperature
-        print 'Temperature = ' + temp
-        try :
+    temp = "R:" + sys.argv[1] 
+    print 'Temperature = ' + temp
+    try :
 
-            #Connect to remote server
-            s.sendall(temp)
-        except socket.error:
-            #Send failed
-            print 'Send failed'
-    else:
-        print 'Failed to get reading. Try again!'
+        #Connect to remote server
+        s.sendall(temp)
+    except socket.error:
+        #Send failed
+        print 'Send failed'
     s.close()
 # Suspect repeated allocation of socket may be chewing up memory so garbace collect
     if gc_count > 5:
