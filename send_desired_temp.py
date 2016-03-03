@@ -1,4 +1,3 @@
-
 # Note this file is for the pi II
 # Manually simulate the remote pi sending a desired temperature.
 # This tests control fire until the hardware arrives
