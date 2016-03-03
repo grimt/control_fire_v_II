@@ -7,6 +7,7 @@ from Queue import Queue
 #import Adafruit_DHT
 import RPi.GPIO as GPIO
 
+import os
 import sys
 import time
 import datetime 
@@ -225,18 +226,37 @@ def write_desired_temp_to_file (key):
             print ("Cant open file desired_temperature.txt for writing")
             my_logger.exception ("Cant open file desired_temperature.txt for writing")
 
+def time_delta (fname):
+    t = os.path.getmtime(fname)
+    file_mod_time = datetime.datetime.fromtimestamp(t)
+    current_time =  datetime.datetime.now()
+    return (current_time - file_mod_time).seconds
+
+
 def read_measured_temp_from_file ():
     temp = my_fire.measured_temp_get() 
-    try:
-        f = open ('/tmp/measured_temperature.txt','rt')
-        temp = f.read ()
-        f.close ()
-    except IOError:
-        if my_fire.debug_level >=2:
-    	    print ("Cant open file measured_temperature.txt for reading")
-        my_logger.exception ("Cant open file measured_temperature.txt for reading")
- 
+    # Always use the remote temperaure if it is avaialbe
+    if time_delta ('./remote_measured_temp.txt') < 30:
+        #use the remote temperature as it is less than 30 seconds old
+        try:
+            f = open ('./remote_measured_temp.txt', 'rt')
+            temp = f.read ()
+            f.close
+        except IOError:
 
+            if my_fire.debug_level >=2:
+    	        print ("Cant open file remote_measured_temp.txt for reading")
+                my_logger.exception ("Cant open file remote_measured_temp.txt for reading")
+    else:
+        # Use local temperature as remore temp may be down
+        try:
+            f = open ('/tmp/measured_temperature.txt','rt')
+            temp = f.read ()
+            f.close ()
+        except IOError:
+            if my_fire.debug_level >=2:
+    	        print ("Cant open file measured_temperature.txt for reading")
+                my_logger.exception ("Cant open file measured_temperature.txt for reading")
     return temp
 
 
