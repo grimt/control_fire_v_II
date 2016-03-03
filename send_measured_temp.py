@@ -1,7 +1,7 @@
 
-# Note this file is for the pi II
-# Manually simulate the remote pi sending a desired temperature.
-# This tests control fire until the hardware arrives
+# Note this file is for thr pi II
+# Simulate the pi sending in a measured temperature.
+# Used to test the control fire algorithms.
 
 import sys
 import Adafruit_DHT
@@ -18,6 +18,9 @@ port = 5000;
 
 remote_ip = '192.168.1.151'
 
+gc_count = 0
+
+
 #create an INET, STREAMing socket
 try:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -29,7 +32,8 @@ try:
     s.connect((remote_ip , port))
 except socket.error:
     print 'connection refused'
-temp = "R:" + sys.argv[1] 
+
+temp = "M:" + sys.argv[1] 
 print 'Temperature = ' + temp
 try :
     #Connect to remote server
