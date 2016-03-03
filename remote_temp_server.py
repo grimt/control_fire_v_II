@@ -47,10 +47,10 @@ while 1:
         except IOError:
             if my_fire.debug_level >=2:
                 print ("Cant open file remote_measured_temp.txt for writing")
-            my_logger.exception("Cant open file remote_measured_temp.txt for writing")
+            #my_logger.exception("Cant open file remote_measured_temp.txt for writing")
     else:
         print ("Recived bad message from remote sensor " + temp_str)
-        my_logger.exception("Recived bad message from remote sensor" + temp_str)
+        #my_logger.exception("Recived bad message from remote sensor" + temp_str)
     # Next write temperature to a file.
     if not data: 
         print 'no data' 
