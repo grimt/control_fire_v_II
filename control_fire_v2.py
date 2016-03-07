@@ -18,8 +18,8 @@ import logging.handlers
 LOG_FILENAME = '/var/log/control_fire.log'
 
 # GPIO PINs
-FIRE_ON_RED_LED = 7
-FIRE_OFF_GREEN_LED = 8
+FIRE_OFF_RED_LED = 7
+FIRE_ON_GREEN_LED = 8
 
  
 # Set up a specific logger with our desired output level
@@ -105,9 +105,17 @@ def init_GPIO():
     GPIO.setmode (GPIO.BCM)
 
     GPIO.setup(OUT_RELAY_PIN, GPIO.OUT)
-    GPIO.setup (FIRE_ON_RED_LED, GPIO.OUT)
-    GPIO.setup (FIRE_OFF_GREEN_LED, GPIO.OUT)
+    GPIO.setup (FIRE_OFF_RED_LED, GPIO.OUT)
+    GPIO.setup (FIRE_ON_GREEN_LED, GPIO.OUT)
 
+def switch_on_temp_led (colour):
+    if colour == FIRE_OF_RED_LED:
+        GPIO.output (FIRE_ON_GREEN_LED, False)
+        GPIO.output (FIRE_OFF_RED_LED, True)
+    else:
+        GPIO.output (FIRE_OFF_RED_LED, False)
+        GPIO.output (FIRE_ON_GREEN_LED, True)	
+    
 
 def toggle_on ():
     my_logger.debug ('Toggle fire ON as ' + str (my_fire.time_since_last_on) + ' seconds since last on')
@@ -122,7 +130,7 @@ def switch_fire (off_or_on):
         if my_fire.time_since_last_on > RELAY_TOGGLE_THRESHHOLD:
             toggle_on ()
         GPIO.output (OUT_RELAY_PIN, True)
-        #Green LED
+        switch_on_temp_led(FIRE_ON_GREEN_LED)
         my_fire.fire_state = ON
         my_fire.time_since_last_on = 0
         update_fire_status (ON)
@@ -130,7 +138,7 @@ def switch_fire (off_or_on):
     	    print ("Fire is ON")
     else:
         GPIO.output (OUT_RELAY_PIN, False)
-        # Red LED
+        switch_on_temp_led(FIRE_OFF_RED_LED)
         my_fire.fire_state = OFF
         update_fire_status (OFF)
         if my_fire.debug_level >=1:
@@ -289,11 +297,9 @@ def update_fire_status (state):
 
 
 def update_measured_temp (temp):
-    switch_on_measured_temp_led (temp)
     write_measured_temp_to_file (temp)
 
 def update_desired_temp (key_press):
-    #switch_on_desired_temp_led (key_press)
     write_desired_temp_to_file (key_press)
 
 def read_measured_temp():
@@ -391,8 +397,6 @@ try:
         time.sleep(1)
 # TODO - make this exception more specific
 except KeyboardInterrupt:
-    # switch off all LEDs
-    update_desired_temp(REMOTE_KEY_NONE)
     switch_fire(OFF)
     my_logger.debug ('Switch fire OFF Program Terminates')
     print ('DONE!!!')
