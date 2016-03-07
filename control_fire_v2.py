@@ -122,6 +122,7 @@ def switch_fire (off_or_on):
         if my_fire.time_since_last_on > RELAY_TOGGLE_THRESHHOLD:
             toggle_on ()
         GPIO.output (OUT_RELAY_PIN, True)
+        #Green LED
         my_fire.fire_state = ON
         my_fire.time_since_last_on = 0
         update_fire_status (ON)
@@ -129,6 +130,7 @@ def switch_fire (off_or_on):
     	    print ("Fire is ON")
     else:
         GPIO.output (OUT_RELAY_PIN, False)
+        # Red LED
         my_fire.fire_state = OFF
         update_fire_status (OFF)
         if my_fire.debug_level >=1:
