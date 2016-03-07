@@ -16,6 +16,11 @@ import logging
 import logging.handlers
 
 LOG_FILENAME = '/var/log/control_fire.log'
+
+# GPIO PINs
+FIRE_ON_RED_LED = 7
+FIRE_OFF_GREEN_LED = 8
+
  
 # Set up a specific logger with our desired output level
 my_logger = logging.getLogger('MyLogger')
@@ -100,6 +105,8 @@ def init_GPIO():
     GPIO.setmode (GPIO.BCM)
 
     GPIO.setup(OUT_RELAY_PIN, GPIO.OUT)
+    GPIO.setup (FIRE_ON_RED_LED, GPIO.OUT)
+    GPIO.setup (FIRE_OFF_GREEN_LED, GPIO.OUT)
 
 
 def toggle_on ():
