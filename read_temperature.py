@@ -37,44 +37,10 @@ DEBUG_LEVEL_2 = 2
 DEBUG_LEVEL_6 = 6
 
 
-# GPIO PINs
-OUT_MEASURED_TEMP_RED_LED = 7
-OUT_MEASURED_TEMP_GREEN_LED = 8
-OUT_MEASURED_TEMP_YELLOW_LED = 23
-OUT_MEASURED_TEMP_BLUE_LED = 24
-
 
 IN_MEASURE_TEMP_PIN = 4
 
 DHT_22 = 22
-
-
-def init_GPIO():
-    GPIO.setwarnings(False)
-    GPIO.setmode (GPIO.BCM)
-
-    GPIO.setup (OUT_MEASURED_TEMP_RED_LED, GPIO.OUT)
-    GPIO.setup (OUT_MEASURED_TEMP_GREEN_LED, GPIO.OUT)
-    GPIO.setup (OUT_MEASURED_TEMP_YELLOW_LED, GPIO.OUT)
-    GPIO.setup (OUT_MEASURED_TEMP_BLUE_LED, GPIO.OUT)
-
-def switch_on_measured_temp_led (temp):
-    # First set all the desired temp LEDs to off
-
-    GPIO.output (OUT_MEASURED_TEMP_RED_LED, False)
-    GPIO.output (OUT_MEASURED_TEMP_GREEN_LED, False)
-    GPIO.output (OUT_MEASURED_TEMP_YELLOW_LED, False)
-    GPIO.output (OUT_MEASURED_TEMP_BLUE_LED, False)
-
-    if temp >= 17 and temp <19:
-        GPIO.output (OUT_MEASURED_TEMP_RED_LED, True) 
-    elif temp >= 19 and temp < 20:
-       GPIO.output (OUT_MEASURED_TEMP_GREEN_LED, True) 
-    elif temp >= 20 and temp < 21:
-        GPIO.output (OUT_MEASURED_TEMP_YELLOW_LED, True)
-    elif temp >= 21:
-        GPIO.output (OUT_MEASURED_TEMP_BLUE_LED, True)
-
 
 # Functions to move date between threads using temporary  files.
 # This mechanism may change
@@ -91,7 +57,6 @@ def read_measured_temp_from_file ():
     	    print ("Cant open file measured_temperature.txt for reading")
         my_logger.exception ("Cant open file measured_temperature.txt for reading")
  
-
     return temp
 
 
@@ -112,7 +77,6 @@ def write_measured_temp_to_file (temp):
 
 
 def update_measured_temp (temp):
-    switch_on_measured_temp_led (temp)
     write_measured_temp_to_file (temp)
 
 def read_measured_temp():
