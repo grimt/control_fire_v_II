@@ -291,8 +291,6 @@ def read_measured_temp():
 
 def read_desired_temp():
     return (read_desired_temp_from_file ())
-    #return (read_remote_q.get())
-
 
 def time_in_range(start, end, x):
     """Return true if x is in the range [start, end]"""
