@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 
-# modules to read from the flirc
-#from evdev import InputDevice, categorize, ecodes
+# Switch gas fire off or on via a relay contolled by raspberry pi.
+# The decision to switch off or on is based, with a few exceptions on
+# the difference between a desired temperature vs a measured temperature.
+
 from threading import Thread, Event
-from Queue import Queue
-#import Adafruit_DHT
+
 import RPi.GPIO as GPIO
 
 import os
 import sys
+
 import time
 import datetime 
 
@@ -16,25 +18,6 @@ import logging
 import logging.handlers
 
 LOG_FILENAME = '/var/log/control_fire.log'
-
-# GPIO PINs
-FIRE_OFF_RED_LED = 7
-FIRE_ON_GREEN_LED = 8
-
- 
-# Set up a specific logger with our desired output level
-my_logger = logging.getLogger('MyLogger')
-my_logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s  %(message)s')
- 
-# Add the log message handler to the logger
-handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
-handler.setFormatter(formatter)
-
-my_logger.addHandler(handler)
-
-my_logger.debug ('Start logging')
-#
 
 # Key definitions
 REMOTE_KEY_NONE = 0
@@ -45,7 +28,6 @@ REMOTE_KEY_BLUE = 5
 
 ON = True
 OFF = False
-TEMPERATURE_OFFSET = 2 # Account for temp sensor being close  to the fire
 
 # The relay can be sticky - i.e. wont switch on if it's been off for some time.
 # We keep a count of the number of seconds it has been off and toggle the
@@ -60,6 +42,8 @@ DEBUG_LEVEL_6 = 6
 
 # GPIO PINs
 OUT_RELAY_PIN = 18
+FIRE_OFF_RED_LED = 7
+FIRE_ON_GREEN_LED = 8
 
 #--------------------------------------- Class Definitions ----------------------------
 
@@ -177,7 +161,7 @@ def control_temperature (desired, actual):
         run_temp_hysteresis (desired, actual) 
 
 
-# Functions to move date between threads using temporary  files.
+# Functions to move data between threads using temporary  files.
 # This mechanism may change
 
 def write_fire_status_to_file (state):
@@ -347,6 +331,19 @@ def check_time (debug_on):
 # Init the hardware
 init_GPIO ()
 
+# Set up a specific logger with our desired output level
+my_logger = logging.getLogger('MyLogger')
+my_logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s  %(message)s')
+ 
+# Add the log message handler to the logger
+handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
+handler.setFormatter(formatter)
+
+my_logger.addHandler(handler)
+
+my_logger.debug ('Start logging')
+
 # Instantiate the main class
 my_fire = Fire ()
 
@@ -358,7 +355,7 @@ my_fire.debug_level_set(DEBUG_LEVEL_2)
 
 my_fire.print_debug_state ()
 
-# Create and lanch the threads
+# Create and launch the threads
 
 
 if my_fire.debug_level >=5:
