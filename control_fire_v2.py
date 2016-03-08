@@ -109,7 +109,7 @@ def init_GPIO():
     GPIO.setup (FIRE_ON_GREEN_LED, GPIO.OUT)
 
 def switch_on_temp_led (colour):
-    if colour == FIRE_OF_RED_LED:
+    if colour == FIRE_OFF_RED_LED:
         GPIO.output (FIRE_ON_GREEN_LED, False)
         GPIO.output (FIRE_OFF_RED_LED, True)
     else:
