@@ -4,6 +4,7 @@
 from threading import Thread, Event
 import Adafruit_DHT
 import RPi.GPIO as GPIO
+from Adafruit_7Segment import SevenSegment
 
 #import sys
 import time
@@ -11,6 +12,9 @@ import time
 
 import logging
 import logging.handlers
+
+#setup i2c
+segment = SevenSegment(address=0x70)
 
 LOG_FILENAME = '/var/log/control_fire.log'
  
@@ -82,13 +86,23 @@ def update_measured_temp (temp):
 def read_measured_temp():
     return read_measured_temp_from_file()
 
+def write_measured_temp_to_led (temp):
+  segment.writeDigit(0, int(temp / 10))     # Tens
+  segment.writeDigit(1, int(temp % 10))          # Ones
+  decimal = temp - int(temp)
+  print str(decimal)
+  decimal = decimal *10
+  segment.writeDigit(3, int(decimal % 10))   # Tens
+  # Toggle colon
+  segment.setColon(1)              # Toggle colon at 1Hz 
+
 
 #---------------------------------------------------------------------------------
 
 # Main thread:
 
 # Init the hardware
-init_GPIO ()
+#init_GPIO ()
 
 debug_level = DEBUG_LEVEL_6
 
@@ -107,6 +121,7 @@ while True:
             print 'Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity)
         #my_logger.info ('Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
         update_measured_temp (temperature)
+        write_measured_temp_to_led(temperature)
         time.sleep(10)
     else:
         if debug_level > 5:
