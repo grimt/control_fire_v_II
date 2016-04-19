@@ -1,5 +1,5 @@
 
-# Note this file is for thr pi II
+# Note this file is for the pi II
 # Simulate the pi sending in a measured temperature.
 # Used to test the control fire algorithms.
 
