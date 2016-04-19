@@ -1,16 +1,22 @@
 
 # Note this file is for the pi II
+# Add code for temp display on 7 segment LED
 
 import sys
 import Adafruit_DHT
 import time
 import socket   #for sockets
+from Adafruit_7Segment import SevenSegment
 
 import gc
 
 import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
+
+#setup i2c
+segment = SevenSegment(address=0x70)
+
 
 
 def read_desired_temperature_from_file():
@@ -45,6 +51,16 @@ def pin_23_callback(channel):
 	desired_temperature = desired_temperature - 1
 	write_desired_temperature_to_file(desired_temperature)
         # send temperature to remote pi
+        
+def write_measured_temp_to_led (temp):
+  segment.writeDigit(0, int(temp / 10))     # Tens
+  segment.writeDigit(1, int(temp % 10))          # Ones
+  decimal = temp - int(temp)
+  print str(decimal)
+  decimal = decimal *10
+  segment.writeDigit(3, int(decimal % 10))   # Tens
+  # Toggle colon
+  segment.setColon(1)              # Toggle colon at 1Hz 
 
 GPIO.setup (18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.add_event_detect (18, GPIO.FALLING, callback=pin_18_callback, bouncetime=1000)
@@ -98,6 +114,7 @@ while True:
         except socket.error:
             #Send failed
             print 'Send failed'
+        write_measured_temp_to_led(temperature)
     else:
         print 'Failed to get reading. Try again!'
 
