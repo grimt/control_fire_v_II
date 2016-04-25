@@ -159,6 +159,19 @@ while True:
         write_temp_to_led(temperature)
     else:
         print 'Failed to get reading. Try again!'
+    s.close()
+    
+    #create an INET, STREAMing socket
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    except socket.error:
+        print 'Failed to create socket'
+        sys.exit()
+
+    try:
+        s.connect((remote_ip , port))
+    except socket.error:
+        print 'connection refused'  
 
     desired_temp = int(read_desired_temperature_from_file())
     if last_desired_temperature_reading != desired_temp:
