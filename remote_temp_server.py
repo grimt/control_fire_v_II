@@ -26,6 +26,11 @@ while 1:
                                            
     temp_str = conn.recv(1024)
     data = temp_str.split(':')
+    print data[0]
+    print data[1]
+    print data[2]
+    print data[3]
+    
     if data[0] is 'R':
         print 'Remote Required temperature: ' + data[1]
         #update the required temp file
