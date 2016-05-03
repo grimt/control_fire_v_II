@@ -145,48 +145,35 @@ while True:
     # the results will be null (because Linux can't
     # guarantee the timing of calls to read the sensor).  
     # If this happens try again!
-  
-    if humidity is not None and temperature is not None:
-        temp = "M:" + "%.3f" % temperature
-        print 'Temperature = ' + temp
-        try :
-
-            #Connect to remote server
-            s.sendall(temp)
-        except socket.error:
-            #Send failed
-            print 'Send failed'
-        write_temp_to_led(temperature)
-    else:
-        print 'Failed to get reading. Try again!'
-    s.close()
-    
-    #create an INET, STREAMing socket
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    except socket.error:
-        print 'Failed to create socket'
-        sys.exit()
-
-    try:
-        s.connect((remote_ip , port))
-    except socket.error:
-        print 'connection refused'  
-
     desired_temp = int(read_desired_temperature_from_file())
     if last_desired_temperature_reading != desired_temp:
-        temp = "R:" + str(desired_temp)
-
-        print 'Desired Temperature = ' + temp
-        try :
-
-            #Connect to remote server
-            s.sendall(temp)
-        except socket.error:
-            #Send failed
-            print 'Send failed'
+        dtemp = "R:" + str(desired_temp)
         last_desired_temperature_reading = desired_temp
+    else
+        dtemp = "R:" + "555"
+        print 'Desired Temperature = ' + dtemp
+        
+    if humidity is not None and temperature is not None:
+        rtemp = "M:" + "%.3f" % temperature
+    else
+        rtemp = "M:" + "555"
+    print 'Temperature = ' + rtemp
+
+    temp = dtemp + rtemp
+    
+    print temp
+    
+    try :
+        #Connect to remote server
+        s.sendall(temp)
+    except socket.error:
+        #Send failed
+        print 'Send failed'
+    write_temp_to_led(temperature)
     s.close()
+
+
+        
 
 # Suspect repeated allocation of socket may be chewing up memory so garbace collect
     if gc_count > 5:
