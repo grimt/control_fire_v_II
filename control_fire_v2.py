@@ -4,6 +4,8 @@
 # The decision to switch off or on is based, with a few exceptions on
 # the difference between a desired temperature vs a measured temperature.
 
+# This script is for the pi close to the fire.
+
 from threading import Thread, Event
 
 import RPi.GPIO as GPIO
@@ -183,13 +185,13 @@ def write_fire_status_to_file (state):
 def read_desired_temp_from_file():
     temp = 0
     try:
-        f = open ('/tmp/temperature.txt','rt')
+        f = open ('/tmp/desired_temperature.txt','rt')
         temp = f.read ()
         f.close ()
     except IOError:
         if my_fire.debug_level >=2:
-            print ("Cant open file temperature.txt for reading")
-        my_logger.exception("Cant open file temperature.txt for reading")
+            print ("Cant open file desired_temperature.txt for reading")
+        my_logger.exception("Cant open file desired_temperature.txt for reading")
 
     return temp
 
@@ -349,7 +351,7 @@ update_desired_temp (REMOTE_KEY_NONE)
 switch_fire(OFF)
 my_logger.debug ('Switch fire OFF Initial condition ')
 # Set the debug level
-my_fire.debug_level_set(DEBUG_LEVEL_2)
+my_fire.debug_level_set(DEBUG_LEVEL_6)
 
 my_fire.print_debug_state ()
 
