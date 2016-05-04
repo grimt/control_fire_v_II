@@ -41,7 +41,6 @@ def write_desired_temperature_to_file(temperature):
 def pin_12_callback(channel):
         # White Button
         print ('Pressed button 12 White')
-        desired_temperature = read_desired_temperature_from_file()
         desired_temperature = 19 
         write_desired_temperature_to_file(desired_temperature)
         #Send temperature to remote pi is done in the while loop below
@@ -51,7 +50,6 @@ def pin_12_callback(channel):
 def pin_18_callback(channel):
         # Green Button
         print ('Pressed button 18 Green')
-        desired_temperature = read_desired_temperature_from_file()
         desired_temperature = 999 
         write_desired_temperature_to_file(desired_temperature)
         #Send temperature to remote pi is done in the while loop below
@@ -76,7 +74,6 @@ def pin_24_callback(channel):
 def pin_25_callback(channel):
         # Red button
         print ('pressed button 25 Red')
-        desired_temperature = read_desired_temperature_from_file()
         desired_temperature = 0
         write_desired_temperature_to_file(desired_temperature)
         # send temperature to remote pi is done in the while loop below.       
@@ -136,9 +133,6 @@ while True:
         s.connect((remote_ip , port))
     except socket.error:
         print 'connection refused'
-
-    #humidity, temperature = Adafruit_DHT.read_retry(22, 4)
-    humidity, temperature = Adafruit_DHT.read(22, 4)
    
    
     # Note that sometimes you won't get a reading and
@@ -147,16 +141,25 @@ while True:
     # If this happens try again!
     desired_temp = int(read_desired_temperature_from_file())
     if last_desired_temperature_reading != desired_temp:
-        dtemp = "R:" + str(desired_temp)
+        dtemp = "R:" + str(desired_temp) + ":"
         last_desired_temperature_reading = desired_temp
-    else
-        dtemp = "R:" + "555"
+    else:
+        dtemp = "R:" + "555" + ":"
         print 'Desired Temperature = ' + dtemp
         
+
+    #humidity, temperature = Adafruit_DHT.read_retry(22, 4)
+    humidity, temperature = Adafruit_DHT.read(22, 4)
+
     if humidity is not None and temperature is not None:
         rtemp = "M:" + "%.3f" % temperature
-    else
+        write_temp_to_led(temperature)
+    else:
+        print "Failed to read temperature"
         rtemp = "M:" + "555"
+
+    time.sleep(2)
+
     print 'Temperature = ' + rtemp
 
     temp = dtemp + rtemp
@@ -169,7 +172,6 @@ while True:
     except socket.error:
         #Send failed
         print 'Send failed'
-    write_temp_to_led(temperature)
     s.close()
 
 
