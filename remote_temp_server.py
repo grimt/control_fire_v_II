@@ -26,10 +26,6 @@ while 1:
                                            
     temp_str = conn.recv(1024)
     data = temp_str.split(':')
-    print data[0]
-    print data[1]
-    print data[2]
-    print data[3]
     
     if data[0] is 'R':
         print 'Remote Required temperature: ' + data[1]
@@ -55,8 +51,7 @@ while 1:
                 #my_logger.exception("Cant open file remote_measured_temp.txt for writing")
     else:
         print ("Recived bad message from remote sensor " + temp_str)
-        #my_logger.exception("Recived bad message from remote sensor" + temp_str)
-    # Next write temperature to a file.
+        #my_logger.exception("Received bad message from remote sensor" + temp_str)
     if not data: 
         print 'no data' 
                                          
