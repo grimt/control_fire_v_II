@@ -34,25 +34,25 @@ while 1:
     if data[0] is 'R':
         print 'Remote Required temperature: ' + data[1]
         #update the required temp file
-        try:
-            f = open ('/tmp/temperature.txt','wt')
-            f.write (data[1])
-            f.close ()
-        except IOError:
-            if my_fire.debug_level >=2:
+        if int (data[1]) != 555:
+            try:
+                f = open ('./temperature.txt','wt')
+                f.write (data[1])
+                f.close ()
+            except IOError:
                 print ("Cant open file temperature.txt for writing")
-            my_logger.exception("Cant open file temperature.txt for writimg")
-    elif data[0] is 'M':
-        print 'Remote Measured temperature: ' + data[1]
+                my_logger.exception("Cant open file temperature.txt for writimg")
+    if data[2] is 'M':
+        print 'Remote Measured temperature: ' + data[3]
         #update the measured temperature file
-        try:
-            f = open ('./remote_measured_temp.txt','wt')
-            f.write (data[1])
-            f.close ()
-        except IOError:
-            if my_fire.debug_level >=2:
+        if float (data[3]) != 555.0:
+            try:
+                f = open ('./remote_measured_temp.txt','wt')
+                f.write (data[3])
+                f.close ()
+            except IOError:
                 print ("Cant open file remote_measured_temp.txt for writing")
-            #my_logger.exception("Cant open file remote_measured_temp.txt for writing")
+                #my_logger.exception("Cant open file remote_measured_temp.txt for writing")
     else:
         print ("Recived bad message from remote sensor " + temp_str)
         #my_logger.exception("Recived bad message from remote sensor" + temp_str)
