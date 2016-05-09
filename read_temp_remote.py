@@ -1,5 +1,5 @@
 
-# Note this file is for the pi II
+# Note this file is for the pi II - REMOTE PI
 # Add code for temp display on 7 segment LED
 
 import sys
@@ -147,7 +147,8 @@ while True:
         dtemp = "R:" + "555" + ":"
         print 'Desired Temperature = ' + dtemp
         
-
+# TO DO - Put the reading of the temperature in to its own task (separate file)
+#         Read the measured temperature from a file.
     #humidity, temperature = Adafruit_DHT.read_retry(22, 4)
     humidity, temperature = Adafruit_DHT.read(22, 4)
 
