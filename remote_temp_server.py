@@ -34,7 +34,7 @@ while 1:
         #update the required temp file
         if int (data[1]) != 555:
             try:
-                f = open ('./temperature.txt','wt')
+                f = open ('/temp/desired_temperature.txt','wt')
                 f.write (data[1])
                 f.close ()
             except IOError:
