@@ -3,6 +3,10 @@
 # Read input from remote control representing the
 # desired temperature. Put this desired temperature
 # in to a file.
+#
+# This is for the LOCAL PI.
+#
+# The remote in the filename refers to remote control
 
 # modules to read from the flirc
 from evdev import InputDevice, categorize, ecodes
