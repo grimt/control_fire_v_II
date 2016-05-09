@@ -4,7 +4,7 @@
 # The decision to switch off or on is based, with a few exceptions on
 # the difference between a desired temperature vs a measured temperature.
 
-# This script is for the pi close to the fire.
+# This script is for the pi close to the fire - LOCAL PI
 
 from threading import Thread, Event
 
