@@ -1,3 +1,5 @@
+# This is for the LOCAL PI
+
 import socket
 import sys
  
