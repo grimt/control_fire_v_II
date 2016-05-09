@@ -178,7 +178,7 @@ while True:
 
         
 
-# Suspect repeated allocation of socket may be chewing up memory so garbace collect
+# Suspect repeated allocation of socket may be chewing up memory so garbage collect
     if gc_count > 5:
         gc_count = 0
         gc.collect()
