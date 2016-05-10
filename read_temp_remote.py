@@ -20,6 +20,7 @@ segment = SevenSegment(address=0x70)
 
 
 def read_desired_temperature_from_file():
+    temp = '555'
     try:
         f = open ('./desired_temperature.txt','rt')
         temp = int(f.read ())
