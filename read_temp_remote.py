@@ -1,6 +1,7 @@
 
 # Note this file is for the pi II - REMOTE PI
-# Add code for temp display on 7 segment LED
+# Next: Read measured temperature in a different script, write it to a file
+#       Read here from a file.
 
 import sys
 import Adafruit_DHT
