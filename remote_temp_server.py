@@ -30,11 +30,11 @@ while 1:
     data = temp_str.split(':')
     
     if data[0] is 'R':
-        print 'Remote Required temperature: ' + data[1]
+        # print 'Remote Required temperature: ' + data[1]
         #update the required temp file
         if int (data[1]) != 555:
             try:
-                f = open ('/temp/desired_temperature.txt','wt')
+                f = open ('/tmp/desired_temperature.txt','wt')
                 f.write (data[1])
                 f.close ()
             except IOError:
