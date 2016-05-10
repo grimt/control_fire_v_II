@@ -1,7 +1,6 @@
 
 # Note this file is for the pi II - REMOTE PI
-# Next: Read measured temperature in a different script, write it to a file
-#       Read here from a file.
+
 
 import sys
 import Adafruit_DHT
@@ -24,7 +23,7 @@ def read_desired_temperature_from_file():
     temp = '555'
     try:
         f = open ('./desired_temperature.txt','rt')
-        temp = int(f.read ())
+        temp = f.read ()
         f.close ()
     except IOError:
             print ("Cant open file desired_temperature.txt for reading")
@@ -38,6 +37,16 @@ def write_desired_temperature_to_file(temperature):
 
     except IOError:
             print ("Cant open file temperature.txt for writing")
+            
+def read_measured_temperature_from_file():
+     temp = '555'
+    try:
+        f = open ('/tmp/measured_temperature.txt','rt')
+        temp = f.read ()
+        f.close ()
+    except IOError:
+            print ("Cant open file desired_temperature.txt for reading")
+    return temp   
 
 
 def pin_12_callback(channel):
@@ -151,15 +160,10 @@ while True:
         
 # TO DO - Put the reading of the temperature in to its own task (separate file)
 #         Read the measured temperature from a file.
-    #humidity, temperature = Adafruit_DHT.read_retry(22, 4)
-    humidity, temperature = Adafruit_DHT.read(22, 4)
+    temperature = int (read_measured_temperature_from_file())
 
-    if humidity is not None and temperature is not None:
-        rtemp = "M:" + "%.3f" % temperature
-        write_temp_to_led(temperature)
-    else:
-        print "Failed to read temperature"
-        rtemp = "M:" + "555"
+    rtemp = "M:" + "%.3f" % temperature
+    write_temp_to_led(temperature)
 
     time.sleep(2)
 
