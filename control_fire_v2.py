@@ -263,27 +263,11 @@ def read_measured_temp_from_file ():
     return temp
 
 
-def write_measured_temp_to_file (temp):
-
-    try:
-        f = open ('/tmp/measured_temperature.txt','wt')
-        f.write ('{0:0.1f}'.format(temp))
-        f.close ()
-    except IOError:
-        if my_fire.debug_level >= 2:
-            print ("Cant open file measured_temperature.txt for writing")
-        my_logger.exception ("Cant open file measured_temperature.txt for writing")
-		
-
 # Higher level functions to move the temperature data between threads. Currently
 # Try using queues to move the data 
 
 def update_fire_status (state):
     write_fire_status_to_file (state)
-
-
-def update_measured_temp (temp):
-    write_measured_temp_to_file (temp)
 
 def update_desired_temp (key_press):
     write_desired_temp_to_file (key_press)
