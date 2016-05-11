@@ -1,4 +1,8 @@
 # This is for the LOCAL PI
+# Accept and parse a message from the remote pi.
+# This message contains the remote Pi's desired temperature
+# as read from the push buttons and the measured temperature
+# For both measured and desired, a temperature of 555 means ignore.
 
 import socket
 import sys
