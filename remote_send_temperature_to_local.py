@@ -98,11 +98,10 @@ while True:
         last_desired_temperature_reading = desired_temp
     else:
         dtemp = "R:" + "555" + ":"
-        print 'Desired Temperature = ' + dtemp
+    print 'Desired Temperature = ' + dtemp
         
-# TO DO - Put the reading of the temperature in to its own task (separate file)
-#         Read the measured temperature from a file.
-    temperature = int (read_measured_temperature_from_file())
+#   Read the measured temperature from a file.
+    temperature = float (read_measured_temperature_from_file())
 
     rtemp = "M:" + "%.3f" % temperature
     write_temp_to_led(temperature)
