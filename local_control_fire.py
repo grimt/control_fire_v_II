@@ -133,7 +133,7 @@ def switch_fire (off_or_on):
 
 
 def run_temp_hysteresis (desired, actual):
-    if my_fire.debug_level >= 2:
+    if my_fire.debug_level >= 5:
         print ('Hysteresis: current state: ' + str (my_fire.fire_state) + ' desired: ' + str (desired) + ' actual: ' + str (actual))
     try:    
         if my_fire.fire_state == OFF:
@@ -335,7 +335,7 @@ update_desired_temp (REMOTE_KEY_NONE)
 switch_fire(OFF)
 my_logger.debug ('Switch fire OFF Initial condition ')
 # Set the debug level
-my_fire.debug_level_set(DEBUG_LEVEL_6)
+my_fire.debug_level_set(DEBUG_LEVEL_2)
 
 my_fire.print_debug_state ()
 
@@ -359,14 +359,14 @@ try:
         temp = read_desired_temp ()
         my_fire.desired_temp_set  (int(temp))
   
-        if my_fire.debug_level >= 2:
+        if my_fire.debug_level >= 4:
              print ('Desired: ' + str (my_fire.desired_temp_get()))
 	 
     
         temp = read_measured_temp ()
         my_fire.measured_temp_set (temp)
 
-        if my_fire.debug_level >= 2:
+        if my_fire.debug_level >= 4:
             print ('Measured: ' + str (my_fire.measured_temp_get()))
             print ('State: ' + str(my_fire.fire_state))
   
