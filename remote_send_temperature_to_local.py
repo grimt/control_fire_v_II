@@ -1,8 +1,22 @@
 
 # Note this file is for the pi II - REMOTE PI
 
-# TODO - Move the interrupts and callbacks to another script
+# Send the measured and desired temperatures from the remote
+# pi to the local pi.
 
+# Only send the desired temperature if it has changed from the last
+# time the desired temperature was sent. This is because the desired
+# temperature can also be set at the local pi from a remote control
+# so we don't want to override. In other words the latest desired
+# temperature to be set should be the one that counts regardless
+# of where it came from.
+#
+# The measured temperature on the other hand should always come
+# from the remote pi if its available.
+
+# In either case, this is implemented by sending 555 if the
+# desired temperature has not changed or the measured temperature
+# is not available.
 
 import sys
 import Adafruit_DHT
