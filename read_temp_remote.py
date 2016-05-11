@@ -1,6 +1,8 @@
 
 # Note this file is for the pi II - REMOTE PI
 
+# TODO - Move the interrupts and callbacks to another script
+
 
 import sys
 import Adafruit_DHT
