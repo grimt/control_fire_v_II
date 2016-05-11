@@ -90,7 +90,7 @@ def read_measured_temp():
 # Init the hardware
 #init_GPIO ()
 
-debug_level = DEBUG_LEVEL_6
+debug_level = DEBUG_LEVEL_5
 
 # Read the temperature from the DHT22 temperature sensor.
     
