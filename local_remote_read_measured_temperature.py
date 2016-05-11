@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
-# modules to read from the flirc
+# Read the temperature from the temperature sensors and place this
+# temperature in a file.
+
+# This script is run in both the LOCAL PI and REMOTE PI.
+
 from threading import Thread, Event
 import Adafruit_DHT
 import RPi.GPIO as GPIO
@@ -48,19 +52,6 @@ DHT_22 = 22
 # This mechanism may change
 
 
-def read_measured_temp_from_file ():
-    temp = my_fire.measured_temp_get() 
-    try:
-        f = open ('/tmp/measured_temperature.txt','rt')
-        temp = f.read ()
-        f.close ()
-    except IOError:
-        if my_fire.debug_level >=2:
-    	    print ("Cant open file measured_temperature.txt for reading")
-        my_logger.exception ("Cant open file measured_temperature.txt for reading")
- 
-    return temp
-
 
 def write_measured_temp_to_file (temp):
 
@@ -81,8 +72,6 @@ def write_measured_temp_to_file (temp):
 def update_measured_temp (temp):
     write_measured_temp_to_file (temp)
 
-def read_measured_temp():
-    return read_measured_temp_from_file()
 
 #---------------------------------------------------------------------------------
 
