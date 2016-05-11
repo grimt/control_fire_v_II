@@ -1,3 +1,6 @@
+# This is for the remote pi
+# Process button press interrupts which
+# allow the user to set a desired temperature.
 
 import RPi.GPIO as GPIO
 
