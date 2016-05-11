@@ -6,7 +6,7 @@
 #
 # This is for the LOCAL PI.
 #
-# The remote in the filename refers to remote control
+# Next - Accept up/down arrows to increase/decrease the desired temperature.
 
 # modules to read from the flirc
 from evdev import InputDevice, categorize, ecodes
