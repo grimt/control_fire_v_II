@@ -16,6 +16,8 @@ from Queue import Queue
 import RPi.GPIO as GPIO
 from threading import Thread, Event
 
+import socket
+
 import time
 
 import logging
