@@ -38,7 +38,7 @@ while 1:
         print "desired temp = " + data[1]
         if int (data[1]) != 555:
             try:
-                f = open ('/tmp/desired_temperature.txt','wt')
+                f = open ('./desired_temperature.txt','wt')
                 f.write (data[1])
                 f.close ()
             except IOError:

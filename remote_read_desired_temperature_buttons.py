@@ -71,6 +71,7 @@ def pin_23_callback(channel):
         # Blue Button
         print ('pressed button 23 Blue')
         desired_temperature = int(read_desired_temperature_from_file())
+        print "Desired " + str (desired_temperature)
         if desired_temperature > 0:
           desired_temperature = desired_temperature - 1
           write_desired_temperature_to_file(str(desired_temperature))
