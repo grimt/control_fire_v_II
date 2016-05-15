@@ -131,8 +131,8 @@ def read_desired_temp_from_file():
 
     return temp
 
-def write_desired_temp_to_file (key):
-   
+def convert_key_to_temp (key)
+    change = False
     if key == REMOTE_KEY_RED:
         # The red remote button toggles the fire off/on irrespective of
         # temperature. This is represented in the file by:
@@ -146,35 +146,45 @@ def write_desired_temp_to_file (key):
             desired_temperature = 999
         elif desired_temperature > 0:
             desired_temperature = 0
+        change = True
     
     elif key == REMOTE_KEY_GREEN:
         desired_temperature = 19
+        change = True
     elif key == REMOTE_KEY_YELLOW:
         desired_temperature = 20
+        change = True
     elif key == REMOTE_KEY_BLUE:
         desired_temperature = 21
+        change = True
     elif key == REMOTE_KEY_NONE:
         desired_temperature = 0
+        change = True
+        
+    if (change == True):
+        return str(desired_temperature)
+    else:
+         return ('555')
 
+def write_desired_temp_to_file (desired_temperature):
+   
     try:
         f = open ('/tmp/desired_temperature.txt','wt')
-        f.write (str (desired_temperature))
+        f.write (desired_temperature)
         f.close ()
     except IOError:
         if debug_level >= DEBUG_LEVEL_2:
     	    print ("Cant open file temperature.txt for writing")
         my_logger.exception ("Cant open file desired_temperature.txt for writing")
         
-    send_desired_temperature_to_remote (str (desired_temperature))
 
-def update_desired_temp (key_press):
-    switch_on_desired_temp_led (key_press)
-    write_desired_temp_to_file (key_press)
-    # remote_read_q.put(key_press)
+def update_desired_temp (temperature, key):
+    switch_on_desired_temp_led (key)
+    write_desired_temp_to_file (temperature)
+    send_desired_temperature_to_remote (temperature)
 
 def read_desired_temp():
     return (read_desired_temp_from_file ())
-    #return (read_remote_q.get())
 
 #---------------------------------------------------------------------------------
 
@@ -183,7 +193,7 @@ def read_desired_temp():
 init_GPIO ()
 
 
-update_desired_temp (REMOTE_KEY_NONE)
+update_desired_temp ('0', REMOTE_KEY_NONE)
 
 debug_level = DEBUG_LEVEL_6 
 
@@ -202,7 +212,7 @@ for event in dev.read_loop():
             print ( 'type: ' + str (event.type) + ' code: ' + str (event.code) + ' value ' + str (event.value))
         if event.value == 0:  # key up
             if event.code == REMOTE_KEY_RED or event.code == REMOTE_KEY_GREEN or event.code == REMOTE_KEY_YELLOW or event.code == REMOTE_KEY_BLUE:
-                update_desired_temp (event.code) 
+                update_desired_temp (convert_key_to_temp(event.code), event.code) 
                 time.sleep(1)
 
 
