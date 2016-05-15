@@ -3,6 +3,7 @@
 # allow the user to set a desired temperature.
 
 import RPi.GPIO as GPIO
+import socket 
 
 
 def send_desired_temperature_to_local (temp):
