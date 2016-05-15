@@ -5,6 +5,24 @@
 import RPi.GPIO as GPIO
 
 
+def send_desired_temperature_to_local (temp):
+    port = 5000;
+    remote_ip = '192.168.1.151'
+    
+    #create an INET, STREAMing socket
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    except socket.error:
+        print 'Failed to create socket'
+        sys.exit()
+
+    try:
+        s.connect((remote_ip , port))
+    except socket.error:
+        print 'connection refused'
+        
+    dtemp = "R:" + temp + ":" + "M:" + "555"
+
 def read_desired_temperature_from_file():
     temp = '555'
     try:
@@ -29,7 +47,7 @@ def pin_12_callback(channel):
         print ('Pressed button 12 White')
         desired_temperature = 19 
         write_desired_temperature_to_file(desired_temperature)
-        #Send temperature to remote pi is done in the while loop below
+        send_desired_temperature_to_local (str (desired_temperature))
 
 
 
@@ -38,6 +56,7 @@ def pin_18_callback(channel):
         print ('Pressed button 18 Green')
         desired_temperature = 999 
         write_desired_temperature_to_file(desired_temperature)
+        send_desired_temperature_to_local (str (desired_temperature))
 
 def pin_23_callback(channel):
         # Blue Button
@@ -46,6 +65,7 @@ def pin_23_callback(channel):
         if desired_temperature > 0:
           desired_temperature = desired_temperature - 1
           write_desired_temperature_to_file(str(desired_temperature))
+          send_desired_temperature_to_local (str (desired_temperature))
 
 def pin_24_callback(channel):
         # Yellow button
@@ -53,14 +73,14 @@ def pin_24_callback(channel):
         desired_temperature = int(read_desired_temperature_from_file())
         desired_temperature = desired_temperature + 1
         write_desired_temperature_to_file(str(desired_temperature))
-        # send temperature to remote pi is done in the while loop below.
+        send_desired_temperature_to_local (str (desired_temperature))
 
 def pin_25_callback(channel):
         # Red button
         print ('pressed button 25 Red')
         desired_temperature = 0
         write_desired_temperature_to_file(str(desired_temperature))
-        # send temperature to remote pi is done in the while loop below.
+        send_desired_temperature_to_local (str (desired_temperature))
 
 
 
