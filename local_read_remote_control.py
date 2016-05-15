@@ -71,6 +71,33 @@ def init_GPIO():
 # data communication  method to change.
 
 
+def send_desired_temperature_to_remote (temp):
+    port = 5000;
+    remote_ip = '192.168.1.161'
+    
+    #create an INET, STREAMing socket
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    except socket.error:
+        print 'Failed to create socket'
+        sys.exit()
+
+    try:
+        s.connect((remote_ip , port))
+    except socket.error:
+        print 'connection refused'
+        
+    dtemp = "R:" + temp + ":" + "M:" + "555"
+    
+    try :
+        #Connect to remote server
+        s.sendall(dtemp)
+    except socket.error:
+        #Send failed
+        print 'Send failed'
+    s.close()
+ 
+    
 def switch_on_desired_temp_led (key):
     # First set all the desired temp LEDs to off
     GPIO.output (OUT_DESIRED_TEMP_GREEN_LED, False)
@@ -135,6 +162,8 @@ def write_desired_temp_to_file (key):
         if debug_level >= DEBUG_LEVEL_2:
     	    print ("Cant open file temperature.txt for writing")
         my_logger.exception ("Cant open file desired_temperature.txt for writing")
+        
+    send_desired_temperature_to_remote (str (desired_temperature))
 
 def update_desired_temp (key_press):
     switch_on_desired_temp_led (key_press)
