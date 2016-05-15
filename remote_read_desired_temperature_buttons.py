@@ -24,6 +24,14 @@ def send_desired_temperature_to_local (temp):
         
     dtemp = "R:" + temp + ":" + "M:" + "555"
 
+    try :
+        #Connect to remote server
+        s.sendall(dtemp)
+    except socket.error:
+        #Send failed
+        print 'Send failed'
+    s.close()
+
 def read_desired_temperature_from_file():
     temp = '555'
     try:

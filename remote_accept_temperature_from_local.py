@@ -35,6 +35,7 @@ while 1:
     if data[0] is 'R':
         # print 'Remote Required temperature: ' + data[1]
         #update the required temp file
+        print "desired temp = " + data[1]
         if int (data[1]) != 555:
             try:
                 f = open ('/tmp/desired_temperature.txt','wt')
