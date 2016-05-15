@@ -131,7 +131,7 @@ def read_desired_temp_from_file():
 
     return temp
 
-def convert_key_to_temp (key)
+def convert_key_to_temp (key):
     change = False
     if key == REMOTE_KEY_RED:
         # The red remote button toggles the fire off/on irrespective of
@@ -214,5 +214,7 @@ for event in dev.read_loop():
             if event.code == REMOTE_KEY_RED or event.code == REMOTE_KEY_GREEN or event.code == REMOTE_KEY_YELLOW or event.code == REMOTE_KEY_BLUE:
                 update_desired_temp (convert_key_to_temp(event.code), event.code) 
                 time.sleep(1)
+            else:
+                print "code: " + event.code
 
 
