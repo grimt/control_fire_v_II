@@ -106,13 +106,14 @@ while True:
     # the results will be null (because Linux can't
     # guarantee the timing of calls to read the sensor).  
     # If this happens try again!
-    desired_temp = int(read_desired_temperature_from_file())
-    if last_desired_temperature_reading != desired_temp:
-        dtemp = "R:" + str(desired_temp) + ":"
-        last_desired_temperature_reading = desired_temp
-    else:
-        dtemp = "R:" + "555" + ":"
-    print 'Desired Temperature = ' + dtemp
+    # desired_temp = int(read_desired_temperature_from_file())
+    # if last_desired_temperature_reading != desired_temp:
+    #     dtemp = "R:" + str(desired_temp) + ":"
+    #   last_desired_temperature_reading = desired_temp
+    # else:
+    # Desired temperature is being sent straight from the button press.
+    dtemp = "R:" + "555" + ":"
+    # print 'Desired Temperature = ' + dtemp
         
 #   Read the measured temperature from a file.
     temperature = float (read_measured_temperature_from_file())
