@@ -55,7 +55,7 @@ def read_measured_temperature_from_file():
         temp = f.read ()
         f.close ()
     except IOError:
-        print ("Cant open file desired_temperature.txt for reading")
+        print ("Cant open file measured_temperature.txt for reading")
     return temp   
 
 
@@ -63,7 +63,7 @@ def write_temp_to_led (temp):
   segment.writeDigit(0, int(temp / 10))     # Tens
   segment.writeDigit(1, int(temp % 10))          # Ones
   decimal = temp - int(temp)
-  print str(decimal)
+  #print str(decimal)
   decimal = decimal *10
   segment.writeDigit(3, int(decimal % 10))   # Tens
   # Toggle colon
@@ -84,7 +84,7 @@ gc_count = 0
 desired_temperature_changed = False
 
 # First read the desired temperature from the file
-last_desired_temperature_reading = int (read_desired_temperature_from_file())
+# last_desired_temperature_reading = int (read_desired_temperature_from_file())
 
 while True:
 
@@ -122,11 +122,11 @@ while True:
 
     time.sleep(2)
 
-    print 'Temperature = ' + rtemp
+    # print 'Temperature = ' + rtemp
 
     temp = dtemp + rtemp
     
-    print temp
+    # print temp
     
     try :
         #Connect to remote server

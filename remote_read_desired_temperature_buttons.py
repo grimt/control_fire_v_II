@@ -4,6 +4,7 @@
 
 import RPi.GPIO as GPIO
 import socket 
+import time
 
 
 def send_desired_temperature_to_local (temp):
@@ -117,4 +118,5 @@ GPIO.add_event_detect (25, GPIO.FALLING, callback=pin_25_callback, bouncetime=10
 
 while True:
     #don't do much
-    balls_variable = 1
+    #balls_variable = 1
+    time.sleep(2)
