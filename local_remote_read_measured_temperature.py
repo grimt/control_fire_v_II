@@ -19,18 +19,6 @@ import logging.handlers
 
 LOG_FILENAME = '/var/log/control_fire.log'
  
-# Set up a specific logger with our desired output level
-my_logger = logging.getLogger('MyLogger')
-my_logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s  %(message)s')
- 
-# Add the log message handler to the logger
-handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
-handler.setFormatter(formatter)
-
-my_logger.addHandler(handler)
-
-my_logger.debug ('Start logging')
 #
 ON = True
 OFF = False
@@ -77,10 +65,21 @@ def update_measured_temp (temp):
 
 # Main thread:
 
-# Init the hardware
-#init_GPIO ()
 
 debug_level = DEBUG_LEVEL_5
+
+# Set up a specific logger with our desired output level
+my_logger = logging.getLogger('MyLogger')
+my_logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s  %(message)s')
+ 
+# Add the log message handler to the logger
+handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
+handler.setFormatter(formatter)
+
+my_logger.addHandler(handler)
+
+my_logger.debug ('Start logging')
 
 # Read the temperature from the DHT22 temperature sensor.
     
