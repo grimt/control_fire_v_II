@@ -75,7 +75,7 @@ def send_desired_temperature_to_remote (temp):
     try:
         s.connect((remote_ip , port))
     except socket.error:
-        # print 'connection refused'
+        print 'connection refused'
         
     dtemp = "R:" + temp + ":" + "M:" + "555"
     
