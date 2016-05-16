@@ -54,7 +54,7 @@ def write_desired_temperature_to_file(temperature):
 
 def pin_12_callback(channel):
         # White Button
-        print ('Pressed button 12 White')
+        # print ('Pressed button 12 White')
         desired_temperature = 19 
         write_desired_temperature_to_file(desired_temperature)
         send_desired_temperature_to_local (str (desired_temperature))
@@ -63,14 +63,14 @@ def pin_12_callback(channel):
 
 def pin_18_callback(channel):
         # Green Button
-        print ('Pressed button 18 Green')
+        # print ('Pressed button 18 Green')
         desired_temperature = 999 
         write_desired_temperature_to_file(desired_temperature)
         send_desired_temperature_to_local (str (desired_temperature))
 
 def pin_23_callback(channel):
         # Blue Button
-        print ('pressed button 23 Blue')
+        # print ('pressed button 23 Blue')
         desired_temperature = int(read_desired_temperature_from_file())
         print "Desired " + str (desired_temperature)
         if desired_temperature > 0:
@@ -80,7 +80,7 @@ def pin_23_callback(channel):
 
 def pin_24_callback(channel):
         # Yellow button
-        print ('pressed button 24 Yellow')
+        # print ('pressed button 24 Yellow')
         desired_temperature = int(read_desired_temperature_from_file())
         desired_temperature = desired_temperature + 1
         write_desired_temperature_to_file(str(desired_temperature))
@@ -88,7 +88,7 @@ def pin_24_callback(channel):
 
 def pin_25_callback(channel):
         # Red button
-        print ('pressed button 25 Red')
+        # print ('pressed button 25 Red')
         desired_temperature = 0
         write_desired_temperature_to_file(str(desired_temperature))
         send_desired_temperature_to_local (str (desired_temperature))
