@@ -22,8 +22,6 @@ import time
 
 import logging
 import logging.handlers
-
-LOG_FILENAME = '/var/log/control_fire.log'
  
 #
 ON = True
@@ -46,6 +44,22 @@ OUT_DESIRED_TEMP_GREEN_LED = 25
 OUT_DESIRED_TEMP_YELLOW_LED = 21
 OUT_DESIRED_TEMP_BLUE_LED = 22
 
+
+def init_logging:
+    LOG_FILENAME = '/var/log/control_fire.log'
+    # Set up a specific logger with our desired output level
+    my_logger = logging.getLogger('MyLogger')
+    my_logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s  %(message)s')
+ 
+    # Add the log message handler to the logger
+    handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
+    handler.setFormatter(formatter)
+
+    my_logger.addHandler(handler)
+
+    my_logger.debug ('Start logging')
+ 
 
 def init_GPIO():
     GPIO.setwarnings(False)
@@ -180,18 +194,7 @@ def read_desired_temp():
 # Init the hardware
 init_GPIO ()
 
-# Set up a specific logger with our desired output level
-my_logger = logging.getLogger('MyLogger')
-my_logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s  %(message)s')
- 
-# Add the log message handler to the logger
-handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
-handler.setFormatter(formatter)
-
-my_logger.addHandler(handler)
-
-my_logger.debug ('Start logging')
+init_logging()
 
 update_desired_temp ('0', REMOTE_KEY_NONE)
 
