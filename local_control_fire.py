@@ -226,8 +226,8 @@ def write_desired_temp_to_file (key):
         f.close ()
     except IOError:
         if my_fire.debug_level >= 2:
-            print ("Cant open file desired_temperature.txt for writing")
-            my_logger.exception ("Cant open file desired_temperature.txt for writing")
+             print ("Cant open file desired_temperature.txt for writing")
+        my_logger.exception ("Cant open file desired_temperature.txt for writing")
 
 def time_delta (fname):
     t = os.path.getmtime(fname)
@@ -246,10 +246,9 @@ def read_measured_temp_from_file ():
             temp = f.read ()
             f.close
         except IOError:
-
             if my_fire.debug_level >=2:
     	        print ("Cant open file remote_measured_temp.txt for reading")
-                my_logger.exception ("Cant open file remote_measured_temp.txt for reading")
+            my_logger.exception ("Cant open file remote_measured_temp.txt for reading")
     else:
         # Use local temperature as remore temp may be down
         try:
@@ -335,7 +334,7 @@ update_desired_temp (REMOTE_KEY_NONE)
 switch_fire(OFF)
 my_logger.debug ('Switch fire OFF Initial condition ')
 # Set the debug level
-my_fire.debug_level_set(DEBUG_LEVEL_2)
+my_fire.debug_level_set(DEBUG_LEVEL_0)
 
 my_fire.print_debug_state ()
 
