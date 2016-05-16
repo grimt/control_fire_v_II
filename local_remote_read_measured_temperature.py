@@ -66,7 +66,7 @@ def update_measured_temp (temp):
 # Main thread:
 
 
-debug_level = DEBUG_LEVEL_5
+debug_level = DEBUG_LEVEL_0
 
 # Set up a specific logger with our desired output level
 my_logger = logging.getLogger('MyLogger')
