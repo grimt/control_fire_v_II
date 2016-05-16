@@ -28,12 +28,6 @@ import gc
 
 import RPi.GPIO as GPIO
 
-GPIO.setmode(GPIO.BCM)
-
-#setup i2c
-segment = SevenSegment(address=0x70)
-
-
 
 def read_desired_temperature_from_file():
     temp = '555'
@@ -76,8 +70,13 @@ def write_temp_to_led (temp):
   segment.setColon(1)              # Toggle colon at 1Hz 
 
 
-port = 5000;
 
+GPIO.setmode(GPIO.BCM)
+
+#setup i2c
+segment = SevenSegment(address=0x70)
+
+port = 5000;
 
 remote_ip = '192.168.1.151'
 
