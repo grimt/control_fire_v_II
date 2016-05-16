@@ -84,7 +84,7 @@ def send_desired_temperature_to_remote (temp):
         s.sendall(dtemp)
     except socket.error:
         #Send failed
-        # print 'Send failed'
+        print 'Send failed'
     s.close()
  
     
