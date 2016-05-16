@@ -25,18 +25,6 @@ import logging.handlers
 
 LOG_FILENAME = '/var/log/control_fire.log'
  
-# Set up a specific logger with our desired output level
-my_logger = logging.getLogger('MyLogger')
-my_logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s  %(message)s')
- 
-# Add the log message handler to the logger
-handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
-handler.setFormatter(formatter)
-
-my_logger.addHandler(handler)
-
-my_logger.debug ('Start logging')
 #
 ON = True
 OFF = False
@@ -192,6 +180,18 @@ def read_desired_temp():
 # Init the hardware
 init_GPIO ()
 
+# Set up a specific logger with our desired output level
+my_logger = logging.getLogger('MyLogger')
+my_logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s  %(message)s')
+ 
+# Add the log message handler to the logger
+handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
+handler.setFormatter(formatter)
+
+my_logger.addHandler(handler)
+
+my_logger.debug ('Start logging')
 
 update_desired_temp ('0', REMOTE_KEY_NONE)
 
