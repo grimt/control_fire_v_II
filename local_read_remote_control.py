@@ -75,7 +75,7 @@ def send_desired_temperature_to_remote (temp):
     try:
         s.connect((remote_ip , port))
     except socket.error:
-        print 'connection refused'
+        # print 'connection refused'
         
     dtemp = "R:" + temp + ":" + "M:" + "555"
     
@@ -84,7 +84,7 @@ def send_desired_temperature_to_remote (temp):
         s.sendall(dtemp)
     except socket.error:
         #Send failed
-        print 'Send failed'
+        # print 'Send failed'
     s.close()
  
     
@@ -162,7 +162,7 @@ def write_desired_temp_to_file (desired_temperature):
         f.close ()
     except IOError:
         if debug_level >= DEBUG_LEVEL_2:
-    	    print ("Cant open file temperature.txt for writing")
+    	       print ("Cant open file temperature.txt for writing")
         my_logger.exception ("Cant open file desired_temperature.txt for writing")
         
 
@@ -195,7 +195,7 @@ my_logger.debug ('Start logging')
 
 update_desired_temp ('0', REMOTE_KEY_NONE)
 
-debug_level = DEBUG_LEVEL_6 
+debug_level = DEBUG_LEVEL_0
 
 dev = InputDevice ('/dev/input/event0')
 if debug_level >= 5:
