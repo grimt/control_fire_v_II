@@ -45,7 +45,7 @@ while 1:
                 print ("Cant open file temperature.txt for writing")
                 my_logger.exception("Cant open file temperature.txt for writimg")
     if data[2] is 'M':
-        print 'Remote Measured temperature: ' + data[3]
+        #print 'Remote Measured temperature: ' + data[3]
         #update the measured temperature file
         if float (data[3]) != 555.0:
             try:
