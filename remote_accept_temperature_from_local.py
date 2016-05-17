@@ -22,7 +22,7 @@ def init_logging:
 
     my_logger.addHandler(handler)
 
-    my_logger.debug ('Start logging'
+    my_logger.debug ('Start logging')
 
 
 init_logging()
