@@ -46,7 +46,7 @@ OUT_DESIRED_TEMP_BLUE_LED = 22
 
 
 def init_logging:
-    LOG_FILENAME = '/var/log/control_fire.log'
+    LOG_FILENAME = '/var/log/local_read_remote_control.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
     my_logger.setLevel(logging.DEBUG)
