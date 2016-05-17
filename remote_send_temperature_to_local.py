@@ -132,6 +132,8 @@ while True:
 #   Read the measured temperature from a file.
     temperature = float (read_measured_temperature_from_file())
 
+    my_logger.debug (str(temperature))
+
     rtemp = "M:" + "%.3f" % temperature
     write_temp_to_led(temperature)
 
