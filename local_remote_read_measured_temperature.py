@@ -15,9 +15,6 @@ import time
 
 import logging
 import logging.handlers
-
-
-LOG_FILENAME = '/var/log/control_fire.log'
  
 #
 ON = True
@@ -39,7 +36,21 @@ DHT_22 = 22
 # Functions to move date between threads using temporary  files.
 # This mechanism may change
 
+def init_logging:
+    LOG_FILENAME = '/var/log/local_remote_read_measured_temperature.log'
+    # Set up a specific logger with our desired output level
+    my_logger = logging.getLogger('MyLogger')
+    my_logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s  %(message)s')
+ 
+    # Add the log message handler to the logger
+    handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
+    handler.setFormatter(formatter)
 
+    my_logger.addHandler(handler)
+
+    my_logger.debug ('Start logging')
+    
 
 def write_measured_temp_to_file (temp):
 
@@ -49,8 +60,7 @@ def write_measured_temp_to_file (temp):
         f.close ()
     except IOError:
         if my_fire.debug_level >= 2:
-            print ("Cant open file measured_temperature.txt for writing")
-        my_logger.exception ("Cant open file measured_temperature.txt for writing")
+            my_logger.exception ("Cant open file measured_temperature.txt for writing")
 		
 
 # Higher level functions to move the temperature data between threads. Currently
@@ -66,20 +76,9 @@ def update_measured_temp (temp):
 # Main thread:
 
 
+init_logging()
+
 debug_level = DEBUG_LEVEL_0
-
-# Set up a specific logger with our desired output level
-my_logger = logging.getLogger('MyLogger')
-my_logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s  %(message)s')
- 
-# Add the log message handler to the logger
-handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
-handler.setFormatter(formatter)
-
-my_logger.addHandler(handler)
-
-my_logger.debug ('Start logging')
 
 # Read the temperature from the DHT22 temperature sensor.
     
@@ -93,12 +92,10 @@ while True:
 
     if humidity is not None and temperature is not None:
         if debug_level > 5:
-            print 'Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity)
-        #my_logger.info ('Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
+            my_logger.info ('Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
         update_measured_temp (temperature)
         time.sleep(10)
     else:
         if debug_level > 5:
-            print 'Failed to get reading. Try again!'
-        #my_logger.info('Failed to read temp')
+            my_logger.info ('Failed to get reading. Try again!')
         time.sleep(2)
