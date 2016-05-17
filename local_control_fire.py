@@ -96,7 +96,7 @@ def init_logging():
     LOG_FILENAME = '/var/log/control_fire.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
-    my_logger.setLevel(logging.DEBUG)
+    my_logger.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s  %(message)s')
  
     # Add the log message handler to the logger
@@ -133,14 +133,14 @@ def switch_fire (off_or_on):
         my_fire.time_since_last_on = 0
         update_fire_status (ON)
         if my_fire.debug_level >=1:
-            my_logger.debug ("Fire is ON")
+            my_logger.info ("Fire is ON")
     else:
         GPIO.output (OUT_RELAY_PIN, False)
         switch_on_temp_led(FIRE_OFF_RED_LED)
         my_fire.fire_state = OFF
         update_fire_status (OFF)
         if my_fire.debug_level >=1:
-    	    my_logger.debug ("Fire is OFF")
+    	    my_logger.info ("Fire is OFF")
  
 
 
@@ -307,7 +307,7 @@ def check_time (debug_on):
 	
 	        if not (time_in_range (start, end, localtime)):
 	            # switch the fire off
-                    my_logger.debug ('Switch fire OFF as outside time range, at: ' + str (localtime))
+                    my_logger.info ('Switch fire OFF as outside time range, at: ' + str (localtime))
                     if my_fire.debug_level >= 2:
                         my_logger.debug ('Switch fire OFF as outside time range at: ' + str(localtime))
 		    update_desired_temp (REMOTE_KEY_NONE)
