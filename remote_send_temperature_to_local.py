@@ -28,6 +28,24 @@ import gc
 
 import RPi.GPIO as GPIO
 
+import logging
+import logging.handlers
+
+def init_logging:
+    LOG_FILENAME = '/var/log/remote_send_temperature.log'
+    # Set up a specific logger with our desired output level
+    my_logger = logging.getLogger('MyLogger')
+    my_logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s  %(message)s')
+ 
+    # Add the log message handler to the logger
+    handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
+    handler.setFormatter(formatter)
+
+    my_logger.addHandler(handler)
+
+    my_logger.debug ('Start logging')
+    
 
 def read_desired_temperature_from_file():
     temp = '555'
@@ -36,7 +54,7 @@ def read_desired_temperature_from_file():
         temp = f.read ()
         f.close ()
     except IOError:
-            print ("Cant open file desired_temperature.txt for reading")
+            my_logger.exception ("Cant open file desired_temperature.txt for reading")
     return temp
 
 def write_desired_temperature_to_file(temperature):
@@ -46,7 +64,7 @@ def write_desired_temperature_to_file(temperature):
         f.close ()
 
     except IOError:
-            print ("Cant open file temperature.txt for writing")
+            my_logger.exception ("Cant open file temperature.txt for writing")
             
 def read_measured_temperature_from_file():
     temp = '555'
@@ -55,7 +73,7 @@ def read_measured_temperature_from_file():
         temp = f.read ()
         f.close ()
     except IOError:
-        print ("Cant open file measured_temperature.txt for reading")
+        my_logger.exception ("Cant open file measured_temperature.txt for reading")
     return temp   
 
 
@@ -63,13 +81,13 @@ def write_temp_to_led (temp):
   segment.writeDigit(0, int(temp / 10))     # Tens
   segment.writeDigit(1, int(temp % 10))          # Ones
   decimal = temp - int(temp)
-  #print str(decimal)
   decimal = decimal *10
   segment.writeDigit(3, int(decimal % 10))   # Tens
   # Toggle colon
   segment.setColon(1)              # Toggle colon at 1Hz 
 
 
+init_logging ()
 
 GPIO.setmode(GPIO.BCM)
 
@@ -92,13 +110,13 @@ while True:
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     except socket.error:
-        print 'Failed to create socket'
+        my_logger.exception 'Failed to create socket'
         sys.exit()
 
     try:
         s.connect((remote_ip , port))
     except socket.error:
-        print 'connection refused'
+        my_logger.exception 'connection refused'
    
    
     # Note that sometimes you won't get a reading and
@@ -112,7 +130,6 @@ while True:
     # else:
     # Desired temperature is being sent straight from the button press.
     dtemp = "R:" + "555" + ":"
-    # print 'Desired Temperature = ' + dtemp
         
 #   Read the measured temperature from a file.
     temperature = float (read_measured_temperature_from_file())
@@ -122,18 +139,15 @@ while True:
 
     time.sleep(2)
 
-    # print 'Temperature = ' + rtemp
 
     temp = dtemp + rtemp
-    
-    # print temp
     
     try :
         #Connect to remote server
         s.sendall(temp)
     except socket.error:
         #Send failed
-        print 'Send failed'
+        my_logger.exception ('Send failed')
     s.close()
 
 
