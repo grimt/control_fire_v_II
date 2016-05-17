@@ -19,8 +19,6 @@ import datetime
 import logging
 import logging.handlers
 
-LOG_FILENAME = '/var/log/control_fire.log'
-
 # Key definitions
 REMOTE_KEY_NONE = 0
 REMOTE_KEY_RED = 2
@@ -93,6 +91,20 @@ def init_GPIO():
     GPIO.setup(OUT_RELAY_PIN, GPIO.OUT)
     GPIO.setup (FIRE_OFF_RED_LED, GPIO.OUT)
     GPIO.setup (FIRE_ON_GREEN_LED, GPIO.OUT)
+    
+def init_logging():
+    LOG_FILENAME = '/var/log/control_fire.log'
+    # Set up a specific logger with our desired output level
+    my_logger = logging.getLogger('MyLogger')
+    my_logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s  %(message)s')
+ 
+    # Add the log message handler to the logger
+    handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
+    handler.setFormatter(formatter)
+    my_logger.addHandler(handler)
+    my_logger.debug ('Start logging')
+    return my_logger
 
 def switch_on_temp_led (colour):
     if colour == FIRE_OFF_RED_LED:
@@ -311,17 +323,7 @@ def check_time (debug_on):
 init_GPIO ()
 
 # Set up a specific logger with our desired output level
-my_logger = logging.getLogger('MyLogger')
-my_logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s  %(message)s')
- 
-# Add the log message handler to the logger
-handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
-handler.setFormatter(formatter)
-
-my_logger.addHandler(handler)
-
-my_logger.debug ('Start logging')
+my_logger = init_logging()
 
 # Instantiate the main class
 my_fire = Fire ()
