@@ -5,6 +5,24 @@
 import RPi.GPIO as GPIO
 import socket 
 import time
+import logging
+import logging.handlers
+
+def init_logging:
+    LOG_FILENAME = '/var/log/remte_read_desired_temp.log'
+    # Set up a specific logger with our desired output level
+    my_logger = logging.getLogger('MyLogger')
+    my_logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s  %(message)s')
+ 
+    # Add the log message handler to the logger
+    handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
+    handler.setFormatter(formatter)
+
+    my_logger.addHandler(handler)
+
+    my_logger.debug ('Start logging')
+
 
 
 def send_desired_temperature_to_local (temp):
@@ -15,13 +33,13 @@ def send_desired_temperature_to_local (temp):
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     except socket.error:
-        print 'Failed to create socket'
+        my_logger.exception ('Failed to create socket')
         sys.exit()
 
     try:
         s.connect((remote_ip , port))
     except socket.error:
-        print 'connection refused'
+        my_logger.exception ('connection refused')
         
     dtemp = "R:" + temp + ":" + "M:" + "555"
 
@@ -30,7 +48,7 @@ def send_desired_temperature_to_local (temp):
         s.sendall(dtemp)
     except socket.error:
         #Send failed
-        print 'Send failed'
+        my_logger.exception ('Send failed')
     s.close()
 
 def read_desired_temperature_from_file():
@@ -40,7 +58,7 @@ def read_desired_temperature_from_file():
         temp = f.read ()
         f.close ()
     except IOError:
-            print ("Cant open file desired_temperature.txt for reading")
+            my_logger.exception ("Cant open file desired_temperature.txt for reading")
     return temp
 
 def write_desired_temperature_to_file(temperature):
@@ -50,11 +68,10 @@ def write_desired_temperature_to_file(temperature):
         f.close ()
 
     except IOError:
-            print ("Cant open file temperature.txt for writing")
+            my_logger.exception ("Cant open file temperature.txt for writing")
 
 def pin_12_callback(channel):
         # White Button
-        # print ('Pressed button 12 White')
         desired_temperature = 19 
         write_desired_temperature_to_file(desired_temperature)
         send_desired_temperature_to_local (str (desired_temperature))
@@ -63,14 +80,12 @@ def pin_12_callback(channel):
 
 def pin_18_callback(channel):
         # Green Button
-        # print ('Pressed button 18 Green')
         desired_temperature = 999 
         write_desired_temperature_to_file(desired_temperature)
         send_desired_temperature_to_local (str (desired_temperature))
 
 def pin_23_callback(channel):
         # Blue Button
-        # print ('pressed button 23 Blue')
         desired_temperature = int(read_desired_temperature_from_file())
         print "Desired " + str (desired_temperature)
         if desired_temperature > 0:
@@ -80,7 +95,6 @@ def pin_23_callback(channel):
 
 def pin_24_callback(channel):
         # Yellow button
-        # print ('pressed button 24 Yellow')
         desired_temperature = int(read_desired_temperature_from_file())
         desired_temperature = desired_temperature + 1
         write_desired_temperature_to_file(str(desired_temperature))
@@ -88,12 +102,13 @@ def pin_24_callback(channel):
 
 def pin_25_callback(channel):
         # Red button
-        # print ('pressed button 25 Red')
         desired_temperature = 0
         write_desired_temperature_to_file(str(desired_temperature))
         send_desired_temperature_to_local (str (desired_temperature))
 
 
+
+init_logging()
 
 GPIO.setmode(GPIO.BCM)
 
