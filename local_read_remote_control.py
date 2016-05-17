@@ -45,7 +45,7 @@ OUT_DESIRED_TEMP_YELLOW_LED = 21
 OUT_DESIRED_TEMP_BLUE_LED = 22
 
 
-def init_logging:
+def init_logging():
     LOG_FILENAME = '/var/log/local_read_remote_control.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
@@ -55,11 +55,9 @@ def init_logging:
     # Add the log message handler to the logger
     handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
     handler.setFormatter(formatter)
-
     my_logger.addHandler(handler)
-
     my_logger.debug ('Start logging')
- 
+    return my_logger 
 
 def init_GPIO():
     GPIO.setwarnings(False)
@@ -89,7 +87,7 @@ def send_desired_temperature_to_remote (temp):
     try:
         s.connect((remote_ip , port))
     except socket.error:
-        mylogger.exception ('connection refused')
+        my_logger.exception ('connection refused')
         
     dtemp = "R:" + temp + ":" + "M:" + "555"
     
@@ -98,7 +96,7 @@ def send_desired_temperature_to_remote (temp):
         s.sendall(dtemp)
     except socket.error:
         #Send failed
-        mylogger.exception ('Send failed')
+        my_logger.exception ('Send failed')
     s.close()
  
     
@@ -128,7 +126,7 @@ def read_desired_temp_from_file():
         f.close ()
     except IOError:
         if debug_level >=DEBUG_LEVEL_2:
-            mylogger.exception ("Cant open file desired_temperature.txt for reading")
+            my_logger.exception ("Cant open file desired_temperature.txt for reading")
 
     return temp
 
@@ -192,7 +190,7 @@ def read_desired_temp():
 # Init the hardware
 init_GPIO ()
 
-init_logging()
+my_logger = init_logging()
 
 update_desired_temp ('0', REMOTE_KEY_NONE)
 
@@ -200,7 +198,7 @@ debug_level = DEBUG_LEVEL_0
 
 dev = InputDevice ('/dev/input/event0')
 if debug_level >= 5:
-    mylogger.debug (dev)
+    my_logger.debug (dev)
 for event in dev.read_loop():
     #
     # type should always be 1 for a keypress
@@ -209,13 +207,13 @@ for event in dev.read_loop():
 
     if event.type == ecodes.EV_KEY:
         if debug_level >= 5:
-            mylogger.debug (categorize(event))
-            mylogger.debug ( 'type: ' + str (event.type) + ' code: ' + str (event.code) + ' value ' + str (event.value))
+            my_logger.debug (categorize(event))
+            my_logger.debug ( 'type: ' + str (event.type) + ' code: ' + str (event.code) + ' value ' + str (event.value))
         if event.value == 0:  # key up
             if event.code == REMOTE_KEY_RED or event.code == REMOTE_KEY_GREEN or event.code == REMOTE_KEY_YELLOW or event.code == REMOTE_KEY_BLUE:
                 update_desired_temp (convert_key_to_temp(event.code), event.code) 
                 time.sleep(1)
             else:
-                mylogger.debug "code: " + event.code
+                my_logger.debug ("code: " + event.code)
 
 

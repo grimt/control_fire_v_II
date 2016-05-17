@@ -14,7 +14,7 @@ HOST = '192.168.1.151'   # Symbolic name meaning all available interfaces
 PORT = 5000 # Arbitrary non-privileged port
  
  
- def init_logging:
+def init_logging():
     LOG_FILENAME = '/var/log/local_accept_temp.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
@@ -24,11 +24,12 @@ PORT = 5000 # Arbitrary non-privileged port
     # Add the log message handler to the logger
     handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
     handler.setFormatter(formatter)
-
     my_logger.addHandler(handler)
-
     my_logger.debug ('Start logging')
+    return my_logger
     
+my_logger = init_logging()
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # print 'Socket created'
    
@@ -38,7 +39,7 @@ except socket.error , msg:
     my_logger.debug('Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1])
     sys.exit()
                     
- my_logger.debug ('Socket bind complete')
+my_logger.debug ('Socket bind complete')
             
 s.listen(10)
 # print 'Socket now listening'
@@ -53,7 +54,7 @@ while 1:
     data = temp_str.split(':')
     
     if data[0] is 'R':
-         my_logger.debug ('Remote Required temperature: ' + data[1])
+        my_logger.debug ('Remote Required temperature: ' + data[1])
         #update the required temp file
         if int (data[1]) != 555:
             try:
