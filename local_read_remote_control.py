@@ -89,7 +89,7 @@ def send_desired_temperature_to_remote (temp):
     try:
         s.connect((remote_ip , port))
     except socket.error:
-        print 'connection refused'
+        mylogger.exception ('connection refused')
         
     dtemp = "R:" + temp + ":" + "M:" + "555"
     
@@ -98,7 +98,7 @@ def send_desired_temperature_to_remote (temp):
         s.sendall(dtemp)
     except socket.error:
         #Send failed
-        print 'Send failed'
+        mylogger.exception ('Send failed')
     s.close()
  
     
@@ -128,8 +128,7 @@ def read_desired_temp_from_file():
         f.close ()
     except IOError:
         if debug_level >=DEBUG_LEVEL_2:
-            print ("Cant open file desired_temperature.txt for reading")
-        my_logger.exception("Cant open file desired_temperature.txt for reading")
+            mylogger.exception ("Cant open file desired_temperature.txt for reading")
 
     return temp
 
@@ -176,8 +175,7 @@ def write_desired_temp_to_file (desired_temperature):
         f.close ()
     except IOError:
         if debug_level >= DEBUG_LEVEL_2:
-    	       print ("Cant open file temperature.txt for writing")
-        my_logger.exception ("Cant open file desired_temperature.txt for writing")
+            my_logger.exception ("Cant open file desired_temperature.txt for writing")
         
 
 def update_desired_temp (temperature, key):
@@ -202,7 +200,7 @@ debug_level = DEBUG_LEVEL_0
 
 dev = InputDevice ('/dev/input/event0')
 if debug_level >= 5:
-    print (dev)
+    mylogger.debug (dev)
 for event in dev.read_loop():
     #
     # type should always be 1 for a keypress
@@ -211,13 +209,13 @@ for event in dev.read_loop():
 
     if event.type == ecodes.EV_KEY:
         if debug_level >= 5:
-            print (categorize(event))
-            print ( 'type: ' + str (event.type) + ' code: ' + str (event.code) + ' value ' + str (event.value))
+            mylogger.debug (categorize(event))
+            mylogger.debug ( 'type: ' + str (event.type) + ' code: ' + str (event.code) + ' value ' + str (event.value))
         if event.value == 0:  # key up
             if event.code == REMOTE_KEY_RED or event.code == REMOTE_KEY_GREEN or event.code == REMOTE_KEY_YELLOW or event.code == REMOTE_KEY_BLUE:
                 update_desired_temp (convert_key_to_temp(event.code), event.code) 
                 time.sleep(1)
             else:
-                print "code: " + event.code
+                mylogger.debug "code: " + event.code
 
 
