@@ -10,7 +10,7 @@ import logging
 import logging.handlers
 
 def init_logging:
-    LOG_FILENAME = '/var/log/control_fire.log'
+    LOG_FILENAME = '/var/log/remote_accept_temperature.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
     my_logger.setLevel(logging.DEBUG)
