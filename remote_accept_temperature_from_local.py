@@ -9,7 +9,7 @@ import sys
 import logging
 import logging.handlers
 
-def init_logging:
+def init_logging():
     LOG_FILENAME = '/var/log/remote_accept_temperature.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
@@ -23,9 +23,11 @@ def init_logging:
     my_logger.addHandler(handler)
 
     my_logger.debug ('Start logging')
+  
+    return my_logger
 
 
-init_logging()
+my_logger = init_logging()
 
 HOST = '192.168.1.161'
 PORT = 5000 # Arbitrary non-privileged port

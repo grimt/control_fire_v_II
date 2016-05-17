@@ -36,7 +36,7 @@ DHT_22 = 22
 # Functions to move date between threads using temporary  files.
 # This mechanism may change
 
-def init_logging:
+def init_logging():
     LOG_FILENAME = '/var/log/local_remote_read_measured_temperature.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
@@ -46,11 +46,9 @@ def init_logging:
     # Add the log message handler to the logger
     handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
     handler.setFormatter(formatter)
-
     my_logger.addHandler(handler)
-
     my_logger.debug ('Start logging')
-    
+    return my_logger 
 
 def write_measured_temp_to_file (temp):
 
@@ -76,7 +74,7 @@ def update_measured_temp (temp):
 # Main thread:
 
 
-init_logging()
+my_logger = init_logging()
 
 debug_level = DEBUG_LEVEL_0
 

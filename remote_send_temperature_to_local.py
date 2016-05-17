@@ -31,7 +31,7 @@ import RPi.GPIO as GPIO
 import logging
 import logging.handlers
 
-def init_logging:
+def init_logging():
     LOG_FILENAME = '/var/log/remote_send_temperature.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
@@ -41,11 +41,9 @@ def init_logging:
     # Add the log message handler to the logger
     handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
     handler.setFormatter(formatter)
-
     my_logger.addHandler(handler)
-
     my_logger.debug ('Start logging')
-    
+    return my_logger 
 
 def read_desired_temperature_from_file():
     temp = '555'
@@ -87,7 +85,7 @@ def write_temp_to_led (temp):
   segment.setColon(1)              # Toggle colon at 1Hz 
 
 
-init_logging ()
+my_logger = init_logging ()
 
 GPIO.setmode(GPIO.BCM)
 
@@ -110,13 +108,13 @@ while True:
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     except socket.error:
-        my_logger.exception 'Failed to create socket'
+        my_logger.exception ('Failed to create socket')
         sys.exit()
 
     try:
         s.connect((remote_ip , port))
     except socket.error:
-        my_logger.exception 'connection refused'
+        my_logger.exception ('connection refused')
    
    
     # Note that sometimes you won't get a reading and

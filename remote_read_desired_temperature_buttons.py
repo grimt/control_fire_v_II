@@ -8,8 +8,8 @@ import time
 import logging
 import logging.handlers
 
-def init_logging:
-    LOG_FILENAME = '/var/log/remte_read_desired_temp.log'
+def init_logging():
+    LOG_FILENAME = '/var/log/remote_read_desired_temp.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
     my_logger.setLevel(logging.DEBUG)
@@ -18,11 +18,9 @@ def init_logging:
     # Add the log message handler to the logger
     handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
     handler.setFormatter(formatter)
-
     my_logger.addHandler(handler)
-
     my_logger.debug ('Start logging')
-
+    return my_logger
 
 
 def send_desired_temperature_to_local (temp):
@@ -108,7 +106,7 @@ def pin_25_callback(channel):
 
 
 
-init_logging()
+my_logger = init_logging()
 
 GPIO.setmode(GPIO.BCM)
 
