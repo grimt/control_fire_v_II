@@ -121,32 +121,33 @@ def switch_fire (off_or_on):
         my_fire.time_since_last_on = 0
         update_fire_status (ON)
         if my_fire.debug_level >=1:
-    	    print ("Fire is ON")
+            my_logger.debug ("Fire is ON")
     else:
         GPIO.output (OUT_RELAY_PIN, False)
         switch_on_temp_led(FIRE_OFF_RED_LED)
         my_fire.fire_state = OFF
         update_fire_status (OFF)
         if my_fire.debug_level >=1:
-    	    print ("Fire is OFF")
+    	    my_logger.debug ("Fire is OFF")
  
 
 
 def run_temp_hysteresis (desired, actual):
     if my_fire.debug_level >= 5:
-        print ('Hysteresis: current state: ' + str (my_fire.fire_state) + ' desired: ' + str (desired) + ' actual: ' + str (actual))
+        my_logger.debug ('Hysteresis: current state: ' + str (my_fire.fire_state) + ' desired: ' + str (desired) + ' actual: ' + str (actual))
     try:    
         if my_fire.fire_state == OFF:
             if float(actual) <= (desired - 1):
                 switch_fire (ON)
-                my_logger.debug ('Switch fire ON Desired: ' + str (desired) + ' Actual: ' + str (actual))
+                if my_fire.debug_level >= 5:
+                    my_logger.debug ('Switch fire ON Desired: ' + str (desired) + ' Actual: ' + str (actual))
         else:
             if float (actual) >= (desired + 1):
                 switch_fire (OFF)
-                my_logger.debug ('Switch fire OFF Desired: ' + str (desired) + ' Actual: ' + str (actual))
+                if my_fire.debug_level >= 5:
+                    my_logger.debug ('Switch fire OFF Desired: ' + str (desired) + ' Actual: ' + str (actual))
     except ValueError:
-        print ('ValueError exception: ' + str (actual))
-        #my_logger.exception ('ValueError exception' + str (actual))
+        my_logger.exception ('ValueError exception' + str (actual))
 
 def control_temperature (desired, actual):
     # The first two checks are for override from the
@@ -177,8 +178,7 @@ def write_fire_status_to_file (state):
 
     except IOError:
         if my_fire.debug_level >= 2:
-    	    print ("Cant open file fire_status.txt for writing")
-        my_logger.exception ("Cant open file fire_status.txt for writing")
+            my_logger.exception ("Cant open file fire_status.txt for writing")
 
 
 
@@ -190,8 +190,7 @@ def read_desired_temp_from_file():
         f.close ()
     except IOError:
         if my_fire.debug_level >=2:
-            print ("Cant open file desired_temperature.txt for reading")
-        my_logger.exception("Cant open file desired_temperature.txt for reading")
+            my_logger.exception("Cant open file desired_temperature.txt for reading")
 
     return temp
 
@@ -226,8 +225,7 @@ def write_desired_temp_to_file (key):
         f.close ()
     except IOError:
         if my_fire.debug_level >= 2:
-             print ("Cant open file desired_temperature.txt for writing")
-        my_logger.exception ("Cant open file desired_temperature.txt for writing")
+            my_logger.exception ("Cant open file desired_temperature.txt for writing")
 
 def time_delta (fname):
     t = os.path.getmtime(fname)
@@ -247,8 +245,7 @@ def read_measured_temp_from_file ():
             f.close
         except IOError:
             if my_fire.debug_level >=2:
-    	        print ("Cant open file remote_measured_temp.txt for reading")
-            my_logger.exception ("Cant open file remote_measured_temp.txt for reading")
+                my_logger.exception ("Cant open file remote_measured_temp.txt for reading")
     else:
         # Use local temperature as remore temp may be down
         try:
@@ -257,7 +254,6 @@ def read_measured_temp_from_file ():
             f.close ()
         except IOError:
             if my_fire.debug_level >=2:
-    	        print ("Cant open file measured_temperature.txt for reading")
                 my_logger.exception ("Cant open file measured_temperature.txt for reading")
     return temp
 
@@ -301,7 +297,7 @@ def check_time (debug_on):
 	            # switch the fire off
                     my_logger.debug ('Switch fire OFF as outside time range, at: ' + str (localtime))
                     if my_fire.debug_level >= 2:
-                        print('Switch fire OFF as outside time range at: ' + str(localtime))
+                        my_logger.debug ('Switch fire OFF as outside time range at: ' + str(localtime))
 		    update_desired_temp (REMOTE_KEY_NONE)
 		    switch_fire(OFF)	
 	
@@ -339,10 +335,6 @@ my_fire.debug_level_set(DEBUG_LEVEL_0)
 my_fire.print_debug_state ()
 
 # Create and launch the threads
-
-
-if my_fire.debug_level >=5:
-    print('Check time')
     
 t3 = Thread(target=check_time, args=(my_fire.debug_level,))
 t3.daemon = True
@@ -359,15 +351,15 @@ try:
         my_fire.desired_temp_set  (int(temp))
   
         if my_fire.debug_level >= 4:
-             print ('Desired: ' + str (my_fire.desired_temp_get()))
+             my_logger.debug ('Desired: ' + str (my_fire.desired_temp_get()))
 	 
     
         temp = read_measured_temp ()
         my_fire.measured_temp_set (temp)
 
         if my_fire.debug_level >= 4:
-            print ('Measured: ' + str (my_fire.measured_temp_get()))
-            print ('State: ' + str(my_fire.fire_state))
+            my_logger.debug ('Measured: ' + str (my_fire.measured_temp_get()))
+            my_logger.debug ('State: ' + str(my_fire.fire_state))
   
         control_temperature (my_fire.desired_temp_get(), my_fire.measured_temp_get()) 
 
@@ -379,4 +371,3 @@ try:
 except KeyboardInterrupt:
     switch_fire(OFF)
     my_logger.debug ('Switch fire OFF Program Terminates')
-    print ('DONE!!!')
