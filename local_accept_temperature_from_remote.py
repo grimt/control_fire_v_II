@@ -6,20 +6,39 @@
 
 import socket
 import sys
+
+import logging
+import logging.handlers
  
 HOST = '192.168.1.151'   # Symbolic name meaning all available interfaces
 PORT = 5000 # Arbitrary non-privileged port
-  
+ 
+ 
+ def init_logging:
+    LOG_FILENAME = '/var/log/local_accept_temp.log'
+    # Set up a specific logger with our desired output level
+    my_logger = logging.getLogger('MyLogger')
+    my_logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s  %(message)s')
+ 
+    # Add the log message handler to the logger
+    handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
+    handler.setFormatter(formatter)
+
+    my_logger.addHandler(handler)
+
+    my_logger.debug ('Start logging')
+    
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # print 'Socket created'
    
 try:
     s.bind((HOST, PORT))
 except socket.error , msg:
-    # print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
+    my_logger.debug('Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1])
     sys.exit()
                     
-# print 'Socket bind complete'
+ my_logger.debug ('Socket bind complete')
             
 s.listen(10)
 # print 'Socket now listening'
@@ -34,7 +53,7 @@ while 1:
     data = temp_str.split(':')
     
     if data[0] is 'R':
-        # print 'Remote Required temperature: ' + data[1]
+         my_logger.debug ('Remote Required temperature: ' + data[1])
         #update the required temp file
         if int (data[1]) != 555:
             try:
@@ -45,7 +64,7 @@ while 1:
                 print ("Cant open file temperature.txt for writing")
                 my_logger.exception("Cant open file temperature.txt for writimg")
     if data[2] is 'M':
-        #print 'Remote Measured temperature: ' + data[3]
+        my_logger.debug ('Remote Measured temperature: ' + data[3])
         #update the measured temperature file
         if float (data[3]) != 555.0:
             try:
@@ -53,15 +72,10 @@ while 1:
                 f.write (data[3])
                 f.close ()
             except IOError:
-                print ("Cant open file remote_measured_temp.txt for writing")
-                #my_logger.exception("Cant open file remote_measured_temp.txt for writing")
+                my_logger.exception("Cant open file remote_measured_temp.txt for writing")
     else:
-        print ("Recived bad message from remote sensor " + temp_str)
-        #my_logger.exception("Received bad message from remote sensor" + temp_str)
+        my_logger.debug ("Recived bad message from remote sensor " + temp_str)
     if not data: 
-        print 'no data' 
-                                         
-#    conn.sendall(reply)
-                                                       
+        my_logger.debug ('no data') 
 conn.close()
 s.close()
