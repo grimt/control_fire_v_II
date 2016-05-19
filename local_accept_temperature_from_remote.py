@@ -18,7 +18,7 @@ def init_logging():
     LOG_FILENAME = '/var/log/local_accept_temp.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
-    my_logger.setLevel(logging.DEBUG)
+    my_logger.setLevel(logging.WARNING)
     formatter = logging.Formatter('%(asctime)s  %(message)s')
  
     # Add the log message handler to the logger
@@ -36,7 +36,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
     s.bind((HOST, PORT))
 except socket.error , msg:
-    my_logger.debug('Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1])
+    my_logger.exception('Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1])
     sys.exit()
                     
 my_logger.debug ('Socket bind complete')
@@ -75,8 +75,8 @@ while 1:
             except IOError:
                 my_logger.exception("Cant open file remote_measured_temp.txt for writing")
     else:
-        my_logger.debug ("Recived bad message from remote sensor " + temp_str)
+        my_logger.info ("Recived bad message from remote sensor " + temp_str)
     if not data: 
-        my_logger.debug ('no data') 
+        my_logger.info ('no data') 
 conn.close()
 s.close()
