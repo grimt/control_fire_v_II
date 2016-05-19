@@ -13,7 +13,7 @@ def init_logging():
     LOG_FILENAME = '/var/log/remote_accept_temperature.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
-    my_logger.setLevel(logging.DEBUG)
+    my_logger.setLevel(logging.WARNING)
     formatter = logging.Formatter('%(asctime)s  %(message)s')
  
     # Add the log message handler to the logger
@@ -66,10 +66,9 @@ while 1:
             except IOError:
                 my_logger.exception("Cant open file temperature.txt for writimg")
     else:
-        my_logger.debug  ("Recived bad message from remote sensor " + temp_str)
-        #my_logger.exception("Received bad message from remote sensor" + temp_str)
+        my_logger.info  ("Recived bad message from remote sensor " + temp_str)
     if not data: 
-        my_logger.debug  ('no data') 
+        my_logger.info  ('no data') 
                                                        
 conn.close()
 s.close()
