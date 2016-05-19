@@ -35,7 +35,7 @@ def init_logging():
     LOG_FILENAME = '/var/log/remote_send_temperature.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
-    my_logger.setLevel(logging.DEBUG)
+    my_logger.setLevel(logging.WARNING)
     formatter = logging.Formatter('%(asctime)s  %(message)s')
  
     # Add the log message handler to the logger
