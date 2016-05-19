@@ -167,11 +167,11 @@ def control_temperature (desired, actual):
     if desired == 0:
         if my_fire.fire_state == ON:
             switch_fire (OFF)
-            my_logger.debug ('Switch fire OFF Desired: ' + str (desired) + ' Actual: ' + str (actual))
+            my_logger.info ('Switch fire OFF Desired: ' + str (desired) + ' Actual: ' + str (actual))
     elif desired == 999:
         if my_fire.fire_state == OFF:
             switch_fire (ON)
-            my_logger.debug ('Switch fire ON Desired: ' + str (desired) + ' Actual: ' + str (actual))
+            my_logger.info ('Switch fire ON Desired: ' + str (desired) + ' Actual: ' + str (actual))
     else:
         run_temp_hysteresis (desired, actual) 
 
