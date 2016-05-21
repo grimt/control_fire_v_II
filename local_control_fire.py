@@ -93,7 +93,7 @@ def init_GPIO():
     GPIO.setup (FIRE_ON_GREEN_LED, GPIO.OUT)
     
 def init_logging():
-    LOG_FILENAME = '/var/log/control_fire.log'
+    LOG_FILENAME = '/var/log/local_control_fire.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
     my_logger.setLevel(logging.INFO)
@@ -132,15 +132,13 @@ def switch_fire (off_or_on):
         my_fire.fire_state = ON
         my_fire.time_since_last_on = 0
         update_fire_status (ON)
-        if my_fire.debug_level >=1:
-            my_logger.info ("Fire is ON")
+        my_logger.info ("Fire is ON")
     else:
         GPIO.output (OUT_RELAY_PIN, False)
         switch_on_temp_led(FIRE_OFF_RED_LED)
         my_fire.fire_state = OFF
         update_fire_status (OFF)
-        if my_fire.debug_level >=1:
-    	    my_logger.info ("Fire is OFF")
+    	my_logger.info ("Fire is OFF")
  
 
 
