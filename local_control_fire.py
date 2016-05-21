@@ -96,7 +96,7 @@ def init_logging():
     LOG_FILENAME = '/var/log/local_control_fire.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
-    my_logger.setLevel(logging.INFO)
+    my_logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s  %(message)s')
  
     # Add the log message handler to the logger
