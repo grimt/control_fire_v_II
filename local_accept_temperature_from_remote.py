@@ -52,29 +52,30 @@ while 1:
                                            
     temp_str = conn.recv(1024)
     data = temp_str.split(':')
-    
-    if data[0] is 'R':
-        my_logger.debug ('Remote Required temperature: ' + data[1])
-        #update the required temp file
-        if int (data[1]) != 555:
-            try:
-                f = open ('/tmp/desired_temperature.txt','wt')
-                f.write (data[1])
-                f.close ()
-            except IOError:
-                print ("Cant open file temperature.txt for writing")
-                my_logger.exception("Cant open file temperature.txt for writimg")
-    if data[2] is 'M':
-        my_logger.debug ('Remote Measured temperature: ' + data[3])
-        #update the measured temperature file
-        if float (data[3]) != 555.0:
-            try:
-                f = open ('./remote_measured_temp.txt','wt')
-                f.write (data[3])
-                f.close ()
-            except IOError:
-                my_logger.exception("Cant open file remote_measured_temp.txt for writing")
-    else:
+
+    try:
+        if data[0] is 'R':
+            my_logger.debug ('Remote Required temperature: ' + data[1])
+            #update the required temp file
+            if int (data[1]) != 555:
+                try:
+                    f = open ('/tmp/desired_temperature.txt','wt')
+                    f.write (data[1])
+                    f.close ()
+                except IOError:
+                    print ("Cant open file temperature.txt for writing")
+                    my_logger.exception("Cant open file temperature.txt for writimg")
+        if data[2] is 'M':
+            my_logger.debug ('Remote Measured temperature: ' + data[3])
+            #update the measured temperature file
+            if float (data[3]) != 555.0:
+                try:
+                    f = open ('./remote_measured_temp.txt','wt')
+                    f.write (data[3])
+                    f.close ()
+                except IOError:
+                    my_logger.exception("Cant open file remote_measured_temp.txt for writing")
+    except:
         my_logger.info ("Recived bad message from remote sensor " + temp_str)
     if not data: 
         my_logger.info ('no data') 
