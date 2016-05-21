@@ -52,21 +52,25 @@ while 1:
     
     temp_str = conn.recv(1024)
     data = temp_str.split(':')
-    
-    if data[0] is 'R':
-        # print 'Remote Required temperature: ' + data[1]
-        #update the required temp file
-        my_logger.debug ("desired temp = " + data[1])
+
+    try:    
+        if data[0] is 'R':
+            # print 'Remote Required temperature: ' + data[1]
+            #update the required temp file
+            my_logger.debug ("desired temp = " + data[1])
         
-        if int (data[1]) != 555:
-            try:
-                f = open ('./desired_temperature.txt','wt')
-                f.write (data[1])
-                f.close ()
-            except IOError:
-                my_logger.exception("Cant open file temperature.txt for writimg")
-    else:
-        my_logger.info  ("Recived bad message from remote sensor " + temp_str)
+            if int (data[1]) != 555:
+                try:
+                    f = open ('./desired_temperature.txt','wt')
+                    f.write (data[1])
+                    f.close ()
+                except IOError:
+                    my_logger.exception("Cant open file temperature.txt for writimg")
+        else:
+            my_logger.info  ("Recived bad message from remote sensor " + temp_str)
+    except:
+        my_logger.info ("Bad data: " + temp_str)
+
     if not data: 
         my_logger.info  ('no data') 
                                                        
