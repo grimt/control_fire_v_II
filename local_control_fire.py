@@ -150,9 +150,12 @@ def run_temp_hysteresis (desired, actual):
                 switch_fire (ON)
                 my_logger.debug ('Switch fire ON Desired: ' + str (desired) + ' Actual: ' + str (actual))
         else:
-            if float (actual) >= (desired + 1):
-                switch_fire (OFF)
-                my_logger.debug ('Switch fire OFF Desired: ' + str (desired) + ' Actual: ' + str (actual))
+            try:
+                if float (actual) >= (desired + 1):
+                    switch_fire (OFF)
+                    my_logger.debug ('Switch fire OFF Desired: ' + str (desired) + ' Actual: ' + str (actual))
+            except:
+                my_logger.exception ('ValueError exception' + str (actual))
     except ValueError:
         my_logger.exception ('ValueError exception' + str (actual))
 

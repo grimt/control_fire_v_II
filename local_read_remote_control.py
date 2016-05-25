@@ -94,7 +94,7 @@ def send_desired_temperature_to_remote (temp):
     try :
         #Connect to remote server
         s.sendall(dtemp)
-    except socket.error:
+    except:
         #Send failed
         my_logger.exception ('Send failed')
     s.close()
