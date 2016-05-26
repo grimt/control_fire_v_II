@@ -40,7 +40,7 @@ def init_logging():
     LOG_FILENAME = '/var/log/local_remote_read_measured_temperature.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
-    my_logger.setLevel(logging.WARNING)
+    my_logger.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s  %(message)s')
  
     # Add the log message handler to the logger
@@ -57,8 +57,7 @@ def write_measured_temp_to_file (temp):
         f.write ('{0:0.1f}'.format(temp))
         f.close ()
     except IOError:
-        if my_fire.debug_level >= 2:
-            my_logger.exception ("Cant open file measured_temperature.txt for writing")
+        my_logger.exception ("Cant open file measured_temperature.txt for writing")
 		
 
 # Higher level functions to move the temperature data between threads. Currently
@@ -89,11 +88,9 @@ while True:
     # If this happens try again!
 
     if humidity is not None and temperature is not None:
-        if debug_level > 5:
-            my_logger.info ('Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
+        my_logger.info ('Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
         update_measured_temp (temperature)
         time.sleep(10)
     else:
-        if debug_level > 5:
-            my_logger.info ('Failed to get reading. Try again!')
+        my_logger.debug ('Failed to get reading. Try again!')
         time.sleep(2)
