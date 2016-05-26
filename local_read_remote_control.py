@@ -96,7 +96,7 @@ def send_desired_temperature_to_remote (temp):
         s.sendall(dtemp)
     except:
         #Send failed
-        my_logger.exception ('Send failed')
+        my_logger.error ('Send failed')
     s.close()
  
     
