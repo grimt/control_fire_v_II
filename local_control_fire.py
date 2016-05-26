@@ -146,12 +146,12 @@ def run_temp_hysteresis (desired, actual):
     my_logger.debug ('Hysteresis: current state: ' + str (my_fire.fire_state) + ' desired: ' + str (desired) + ' actual: ' + str (actual))
     try:    
         if my_fire.fire_state == OFF:
-            if float(actual) <= (desired - 1):
+            if float(actual) <= (desired - 0.5):
                 switch_fire (ON)
                 my_logger.debug ('Switch fire ON Desired: ' + str (desired) + ' Actual: ' + str (actual))
         else:
             try:
-                if float (actual) >= (desired + 1):
+                if float (actual) >= (desired ):
                     switch_fire (OFF)
                     my_logger.debug ('Switch fire OFF Desired: ' + str (desired) + ' Actual: ' + str (actual))
             except:
