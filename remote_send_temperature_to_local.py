@@ -145,9 +145,9 @@ while True:
     try :
         #Connect to remote server
         s.sendall(temp)
-    except socket.error:
+    except:
         #Send failed
-        my_logger.exception ('Send failed')
+        my_logger.info ('Send failed')
     s.close()
 
 
