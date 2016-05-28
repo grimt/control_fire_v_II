@@ -8,6 +8,9 @@ import time
 import logging
 import logging.handlers
 
+
+from Adafruit_7Segment import SevenSegment
+
 def init_logging():
     LOG_FILENAME = '/var/log/remote_read_desired_temp.log'
     # Set up a specific logger with our desired output level
@@ -22,11 +25,19 @@ def init_logging():
     my_logger.debug ('Start logging')
     return my_logger
 
+def write_temp_to_7segment (temp):
+  hundreds = int (temp / 100)
+  segment.writeDigit(0, hundreds)            # Hundreds 
+  temp = temp - (hundreds * 100)
+  segment.writeDigit(1, int(temp / 10))      # tens
+  segment.writeDigit(3, int(temp % 10))      # ones 
 
 def send_desired_temperature_to_local (temp):
     port = 5000;
     remote_ip = '192.168.1.151'
-    
+   
+    write_temp_to_7segment (int(temp))
+ 
     #create an INET, STREAMing socket
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -85,7 +96,6 @@ def pin_18_callback(channel):
 def pin_23_callback(channel):
         # Blue Button
         desired_temperature = int(read_desired_temperature_from_file())
-        print "Desired " + str (desired_temperature)
         if desired_temperature > 0:
           desired_temperature = desired_temperature - 1
           write_desired_temperature_to_file(str(desired_temperature))
@@ -128,6 +138,8 @@ GPIO.add_event_detect (24, GPIO.FALLING, callback=pin_24_callback, bouncetime=10
 GPIO.setup (25, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.add_event_detect (25, GPIO.FALLING, callback=pin_25_callback, bouncetime=1000)
 
+#setup i2c
+segment = SevenSegment(address=0x71)
 
 while True:
     #don't do much

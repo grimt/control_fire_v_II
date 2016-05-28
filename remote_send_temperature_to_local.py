@@ -35,7 +35,7 @@ def init_logging():
     LOG_FILENAME = '/var/log/remote_send_temperature.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
-    my_logger.setLevel(logging.WARNING)
+    my_logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s  %(message)s')
  
     # Add the log message handler to the logger
@@ -104,6 +104,7 @@ desired_temperature_changed = False
 
 while True:
 
+
     #create an INET, STREAMing socket
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -113,7 +114,7 @@ while True:
 
     try:
         s.connect((remote_ip , port))
-    except socket.error:
+    except:
         my_logger.exception ('connection refused')
    
    
@@ -145,6 +146,7 @@ while True:
     try :
         #Connect to remote server
         s.sendall(temp)
+        my_logger.debug ("Sent temperature: " + temp)
     except:
         #Send failed
         my_logger.info ('Send failed')
