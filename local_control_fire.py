@@ -244,22 +244,25 @@ def time_delta (fname):
 def read_measured_temp_from_file ():
     temp = my_fire.measured_temp_get() 
     # Always use the remote temperaure if it is avaialbe
-    if time_delta ('./remote_measured_temp.txt') < 30:
-        #use the remote temperature as it is less than 30 seconds old
-        try:
-            f = open ('./remote_measured_temp.txt', 'rt')
-            temp = f.read ()
-            f.close
-        except IOError:
-            my_logger.exception ("Cant open file remote_measured_temp.txt for reading")
-    else:
-        # Use local temperature as remore temp may be down
-        try:
-            f = open ('/tmp/measured_temperature.txt','rt')
-            temp = f.read ()
-            f.close ()
-        except IOError:
-            my_logger.exception ("Cant open file measured_temperature.txt for reading")
+    try:
+        if time_delta ('./remote_measured_temp.txt') < 30:
+            #use the remote temperature as it is less than 30 seconds old
+            try:
+                f = open ('./remote_measured_temp.txt', 'rt')
+                temp = f.read ()
+                f.close
+            except IOError:
+                my_logger.exception ("Cant open file remote_measured_temp.txt for reading")
+        else:
+            # Use local temperature as remore temp may be down
+            try:
+                f = open ('/tmp/measured_temperature.txt','rt')
+                temp = f.read ()
+                f.close ()
+            except IOError:
+                my_logger.exception ("Cant open file measured_temperature.txt for reading")
+    except:
+        my_logger.warning ('Cant open file')
     return temp
 
 

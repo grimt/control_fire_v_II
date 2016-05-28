@@ -44,7 +44,7 @@ def init_logging():
     formatter = logging.Formatter('%(asctime)s  %(message)s')
  
     # Add the log message handler to the logger
-    handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000, backupCount=5)  
+    handler = logging.handlers.RotatingFileHandler( LOG_FILENAME, maxBytes=20000000, backupCount=5)  
     handler.setFormatter(formatter)
     my_logger.addHandler(handler)
     my_logger.debug ('Start logging')
@@ -57,7 +57,7 @@ def write_measured_temp_to_file (temp):
         f.write ('{0:0.1f}'.format(temp))
         f.close ()
     except IOError:
-        my_logger.exception ("Cant open file measured_temperature.txt for writing")
+        my_logger.warning ("Cant open file measured_temperature.txt for writing")
 		
 
 # Higher level functions to move the temperature data between threads. Currently
@@ -88,7 +88,7 @@ while True:
     # If this happens try again!
 
     if humidity is not None and temperature is not None:
-        my_logger.info ('Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
+        my_logger.info (',{0:0.1f},{1:0.1f}'.format(temperature, humidity))
         update_measured_temp (temperature)
         time.sleep(10)
     else:
