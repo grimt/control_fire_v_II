@@ -8,6 +8,8 @@ import sys
 
 import logging
 import logging.handlers
+from Adafruit_7Segment import SevenSegment
+from Adafruit_LEDBackpack import LEDBackpack
 
 def init_logging():
     LOG_FILENAME = '/var/log/remote_accept_temperature.log'
@@ -26,8 +28,21 @@ def init_logging():
   
     return my_logger
 
+def write_temp_to_7segment (temp):
+  segment = SevenSegment(address=0x71) 
+  hundreds = int (temp / 100)
+  if (hundreds > 0):
+      segment.writeDigit(1, hundreds)            # Hundreds
+  temp = temp - (hundreds * 100)
+  segment.writeDigit(3, int(temp / 10))      # tens
+  segment.writeDigit(4, int(temp % 10))      # ones
+
 
 my_logger = init_logging()
+
+#setup i2c
+segment = SevenSegment(address=0x71)
+led = LEDBackpack(0x71)
 
 HOST = '192.168.1.161'
 PORT = 5000 # Arbitrary non-privileged port
@@ -63,6 +78,7 @@ while 1:
                 try:
                     f = open ('./desired_temperature.txt','wt')
                     f.write (data[1])
+                    write_temp_to_7segment (int(data[1]))
                     f.close ()
                 except IOError:
                     my_logger.exception("Cant open file temperature.txt for writimg")

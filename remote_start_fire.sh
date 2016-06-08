@@ -9,4 +9,7 @@ sudo python /home/pi/pycode/control_fire_v_II/remote_accept_temperature_from_loc
 sleep 1
 sudo python /home/pi/pycode/control_fire_v_II/remote_send_temperature_to_local.py &
 
+i2cset -y 1 0x70 0xe6
+i2cset -y 1 0x71 0xe6
+
 echo scripts started

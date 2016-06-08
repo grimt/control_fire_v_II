@@ -19,6 +19,7 @@
 # is not available.
 
 import sys
+import os
 import Adafruit_DHT
 import time
 import socket   #for sockets
@@ -61,8 +62,8 @@ def write_desired_temperature_to_file(temperature):
         f.write (str(temperature))
         f.close ()
 
-    except IOError:
-            my_logger.exception ("Cant open file temperature.txt for writing")
+    except:
+            my_logger.warning ("Cant open file temperature.txt for writing")
             
 def read_measured_temperature_from_file():
     temp = '555'
@@ -91,6 +92,9 @@ GPIO.setmode(GPIO.BCM)
 
 #setup i2c
 segment = SevenSegment(address=0x70)
+
+#Turn down the brightness of the LEDs
+# os.system('i2cset -y 1 0x70 0xe3')
 
 port = 5000;
 

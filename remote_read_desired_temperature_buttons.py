@@ -2,6 +2,7 @@
 # Process button press interrupts which
 # allow the user to set a desired temperature.
 
+import os
 import RPi.GPIO as GPIO
 import socket 
 import time
@@ -10,12 +11,13 @@ import logging.handlers
 
 
 from Adafruit_7Segment import SevenSegment
+from Adafruit_LEDBackpack import LEDBackpack
 
 def init_logging():
     LOG_FILENAME = '/var/log/remote_read_desired_temp.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
-    my_logger.setLevel(logging.WARNING)
+    my_logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s  %(message)s')
  
     # Add the log message handler to the logger
@@ -26,16 +28,19 @@ def init_logging():
     return my_logger
 
 def write_temp_to_7segment (temp):
+  segment = SevenSegment(address=0x71)
   hundreds = int (temp / 100)
-  segment.writeDigit(0, hundreds)            # Hundreds 
+  if (hundreds > 0):
+      segment.writeDigit(1, hundreds)            # Hundreds 
   temp = temp - (hundreds * 100)
-  segment.writeDigit(1, int(temp / 10))      # tens
-  segment.writeDigit(3, int(temp % 10))      # ones 
+  segment.writeDigit(3, int(temp / 10))      # tens
+  segment.writeDigit(4, int(temp % 10))      # ones 
 
 def send_desired_temperature_to_local (temp):
     port = 5000;
     remote_ip = '192.168.1.151'
-   
+  
+    my_logger.debug ('Send desired: ' + temp + ' to local PI') 
     write_temp_to_7segment (int(temp))
  
     #create an INET, STREAMing socket
@@ -140,6 +145,9 @@ GPIO.add_event_detect (25, GPIO.FALLING, callback=pin_25_callback, bouncetime=10
 
 #setup i2c
 segment = SevenSegment(address=0x71)
+#Turn down the brightness of the LEDs
+# os.system('sudo i2cset -y 1 0x71 0xe3')
+
 
 while True:
     #don't do much
