@@ -49,7 +49,7 @@ def init_logging():
     LOG_FILENAME = '/var/log/local_read_remote_control.log'
     # Set up a specific logger with our desired output level
     my_logger = logging.getLogger('MyLogger')
-    my_logger.setLevel(logging.WARNING)
+    my_logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s  %(message)s')
  
     # Add the log message handler to the logger
@@ -133,37 +133,21 @@ def read_desired_temp_from_file():
 def convert_key_to_temp (key):
     change = False
     if key == REMOTE_KEY_RED:
-        # The red remote button toggles the fire off/on irrespective of
-        # temperature. This is represented in the file by:
-        # on = 999
-        # off = 0
-        # To Toggle the temperature we must first read it from the file.
         desired_temperature = 0
-        temp = read_desired_temp ()
-        desired_temperature = int (temp)
-        if desired_temperature == 0:
-            desired_temperature = 999
-        elif desired_temperature > 0:
-            desired_temperature = 0
-        change = True
-    
     elif key == REMOTE_KEY_GREEN:
-        desired_temperature = 19
-        change = True
+        desired_temperature = 24 
     elif key == REMOTE_KEY_YELLOW:
-        desired_temperature = 20
-        change = True
+        desired_temperature = int(read_desired_temp_from_file())
+        desired_temperature = desired_temperature + 1
     elif key == REMOTE_KEY_BLUE:
-        desired_temperature = 21
-        change = True
+        desired_temperature = int(read_desired_temp_from_file())
+        if desired_temperature > 0:
+          desired_temperature = desired_temperature -1 
     elif key == REMOTE_KEY_NONE:
-        desired_temperature = 0
-        change = True
-        
-    if (change == True):
-        return str(desired_temperature)
-    else:
-         return ('555')
+        desired_temperature = read_desired_temp_from_file()
+
+    return str(desired_temperature)
+
 
 def write_desired_temp_to_file (desired_temperature):
    
@@ -180,6 +164,7 @@ def update_desired_temp (temperature, key):
     switch_on_desired_temp_led (key)
     write_desired_temp_to_file (temperature)
     send_desired_temperature_to_remote (temperature)
+    my_logger.debug ("Required temperature is now: " + temperature)
 
 def read_desired_temp():
     return (read_desired_temp_from_file ())

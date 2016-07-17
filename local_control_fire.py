@@ -345,7 +345,10 @@ try:
     while True:
 
         temp = read_desired_temp ()
-        my_fire.desired_temp_set  (int(temp))
+        try:
+            my_fire.desired_temp_set  (int(temp))
+        except:
+            my_logger.warning ("Value error for temperature: " + temp)
   
         my_logger.debug ('Desired: ' + str (my_fire.desired_temp_get()))
 	 
